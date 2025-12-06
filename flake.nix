@@ -2,14 +2,18 @@
   description = "abhi's nix config";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-25.05";
-    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     fix-python.url = "github:GuillaumeDesforges/fix-python";
 
     ida-pro-overlay = {
       url = "github:hideyosh1/ida-pro-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
 
@@ -19,6 +23,7 @@
       nixpkgs,
       fix-python,
       nixpkgs-unstable,
+      zen-browser,
       ...
     }:
     let
@@ -27,7 +32,6 @@
     in
     {
       nixosConfigurations.abhi = lib.nixosSystem {
-        inherit system;
 
         specialArgs = {
           inherit inputs;

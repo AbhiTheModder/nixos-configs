@@ -11,13 +11,40 @@
 }:
 
 let
-  fixPythonPkg = inputs.fix-python.packages.${pkgs.system}.default;
+  fixPythonPkg = inputs.fix-python.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  zenBrowser = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+    config.zen.policies = {
+      DisableAppUpdate = true;
+      DisableTelemetry = true;
+      AutofillAddressEnabled = false;
+      AutofillCreditCardEnabled = false;
+      DisableFeedbackCommands = true;
+      DisableFirefoxStudies = true;
+      DisablePocket = true;
+      DontCheckDefaultBrowser = true;
+      NoDefaultBookmarks = true;
+      OfferToSaveLogins = false;
+      EnableTrackingProtection = {
+        Value = true;
+        Locked = true;
+        Cryptomining = true;
+        Fingerprinting = true;
+      };
+      DisableFirefoxAccounts = true;
+    };
+  };
 in
 {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
+
+  nix = {
+    settings = {
+      max-jobs = 8;
+    };
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -39,7 +66,7 @@ in
     settings = {
       ports.dns = 53; # Port for incoming DNS Queries.
       upstreams.groups.default = [
-        "https://one.one.one.one/dns-query" # Using Cloudflare's DNS over HTTPS server for resolving queries.
+        "https://one.one.one.one/dns-query"
       ];
       # For initially solving DoH/DoT Requests when no system Resolver is available.
       bootstrapDns = {
@@ -76,8 +103,8 @@ in
   };
 
   # Enable KVM
-  # virtualisation.virtualbox.host.enableKvm = true;
-  # virtualisation.libvirtd.enable = true;
+  virtualisation.virtualbox.host.enableKvm = true;
+  virtualisation.libvirtd.enable = true;
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -107,15 +134,14 @@ in
   services.xserver.excludePackages = with pkgs; [ xterm ];
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
   services.gnome.core-apps.enable = false;
 
   # Environment variables
   environment.sessionVariables = rec {
     ANDROID_HOME = "$HOME/Android/Sdk";
     NIXOS_OZONE_WL = "1";
-    CHROME_EXECUTABLE = "/run/current-system/sw/bin/google-chrome-stable";
     PATH = [
       "$HOME/Android/flutter/bin"
       "${ANDROID_HOME}/platform-tools"
@@ -166,6 +192,12 @@ in
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
     };
+    virtualbox = {
+      host.enable = true;
+      host.addNetworkInterface = false;
+      guest.clipboard = true;
+      guest.dragAndDrop = true;
+    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -200,6 +232,7 @@ in
       ".." = "cd ..";
       ":q" = "exit";
       wget = "wget -q --show-progress";
+      jjar = "java -jar";
     };
     promptInit = ''
       	  PROMPT_COMMAND='PS1_CMD1=$(git branch --show-current 2>/dev/null)'; PS1='\[\e[38;5;39m\] \[\e[0m\]\[\e[38;5;46m\]┬─[\[\e[38;5;226m\]\u\[\e[0m\]@\[\e[38;5;33m\]\h\[\e[0m\]:\w\[\e[38;5;46m\]]─[\[\e[38;5;46m\]''${PS1_CMD1}]\n\[\e[38;5;46m\]╰─>\[\e[0m\] '
@@ -264,7 +297,6 @@ in
     distrobox
     jdk17
     fixPythonPkg
-    vscode-fhs
     android-studio
     distrobox
     eza
@@ -273,11 +305,16 @@ in
     helix
     wl-clipboard
     delta
-    nixd
+    pkgsUnstable.nixd
     nixfmt-rfc-style
     croc
     kdePackages.kdenlive
     showmethekey
+    axel
+    ripgrep
+
+    pkgsUnstable.ty
+    pkgsUnstable.ruff
 
     # rev
     (callPackage ida-pro {
@@ -293,13 +330,13 @@ in
     jadx
     frida-tools
     burpsuite
+    imhex
 
     # Cursor
     apple-cursor
 
     # GNOME APPS
     nautilus
-    file-roller
     gnome-calculator
     blackbox-terminal
     gnome-disk-utility
@@ -314,7 +351,6 @@ in
     decibels
 
     # GNOME EXTENSIONS
-    # gnomeExtensions.gtile
     gnomeExtensions.focus
     gnomeExtensions.vitals
     gnomeExtensions.app-hider
@@ -332,12 +368,15 @@ in
     gnomeExtensions.open-bar
     gnomeExtensions.emoji-copy
     gnomeExtensions.appindicator
+    gnomeExtensions.tiling-shell
 
     # OTHER
-    google-chrome
+    peazip
     proton-pass
-    bottles
+    handbrake
     pkgsUnstable.opencode
+    pkgsUnstable.zed-editor-fhs
+    zenBrowser
 
     # Python
     python3
@@ -348,7 +387,6 @@ in
     maple-mono.NF-CN
     noto-fonts-color-emoji
   ];
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
