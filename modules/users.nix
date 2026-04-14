@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgsUnstable, ... }:
 
 {
   users.users.abhi = {
@@ -11,6 +11,9 @@
       "video"
       "render"
       "input"
+    ];
+    packages = [
+      pkgsUnstable.telegram-desktop
     ];
   };
 }
