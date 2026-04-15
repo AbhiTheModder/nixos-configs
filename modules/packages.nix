@@ -28,7 +28,6 @@
       showmethekey
       axel
       ripgrep
-      cutter
       iaito
       jadx
       frida-tools
