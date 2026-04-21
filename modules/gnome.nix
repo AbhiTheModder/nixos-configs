@@ -1,6 +1,9 @@
 { pkgs, ... }:
 
 {
+  xdg.terminal-exec.enable = true;
+  xdg.terminal-exec.settings.default = ["org.wezfurlong.wezterm.desktop"];
+
   services.xserver.enable = true;
   services.xserver.excludePackages = with pkgs; [ xterm ];
 
@@ -19,7 +22,6 @@
     gnome-calculator
     gnome-disk-utility
     gnome-tweaks
-    gnome-console
     gnome-system-monitor
     fragments
     switcheroo

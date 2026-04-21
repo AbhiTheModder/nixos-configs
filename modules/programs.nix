@@ -13,6 +13,7 @@
     shellAliases = {
       cd = "z";
       rebuild = "nh os switch";
+      reclean = "sudo rm /nix/var/nix/profiles/system-* && nh os boot";
       reboot = "sudo reboot";
       cat = "bat";
       vi = "hx";
@@ -37,12 +38,10 @@
 
       PROMPT_COMMAND='PS1_CMD1=$(git branch --show-current 2>/dev/null); '"$PROMPT_COMMAND"
 
-      PS1='\[\e[38;5;39m\]  \[\e[0m\]\[\e[38;5;46m\]┬─[\[\e[38;5;226m\]\u\[\e[0m\]@\[\e[38;5;33m\]\h\[\e[0m\]:\w\[\e[38;5;46m\]]─[\[\e[38;5;46m\]$PS1_CMD1]\n\[\e[38;5;46m\]╰─>\[\e[0m\] '
+      PS1='\[\e[38;5;39m\] \[\e[0m\]\[\e[38;5;46m\]┬─[\[\e[38;5;226m\]\u\[\e[0m\]@\[\e[38;5;33m\]\h\[\e[0m\]:\w\[\e[38;5;46m\]]─[\[\e[38;5;46m\]$PS1_CMD1]\n\[\e[38;5;46m\]╰─>\[\e[0m\] '
     '';
     shellInit = ''
-      _ZO_DOCTOR=0
-      export WASMER_DIR="/home/abhi/.wasmer"
-      [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
+      eval "$(direnv hook bash)"
     '';
   };
 

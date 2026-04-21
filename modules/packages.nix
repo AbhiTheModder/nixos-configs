@@ -58,6 +58,6 @@
       ruff
       zed-editor-fhs
       proton-vpn-cli
-      ghostty
+      wezterm
     ]);
 }
