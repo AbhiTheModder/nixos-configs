@@ -2,13 +2,13 @@
   description = "abhi's nix config";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-25.11";
+    nixpkgs.url = "nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     fix-python.url = "github:GuillaumeDesforges/fix-python";
 
     ida-pro-overlay = {
-      url = "github:hideyosh1/ida-pro-overlay";
+      url = "github:msanft/ida-pro-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser = {

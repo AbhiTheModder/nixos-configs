@@ -36,6 +36,9 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-39.8.10"
+  ];
   nixpkgs.overlays = [
     inputs.ida-pro-overlay.overlays.default
     (import ./pkgs { inherit inputs system; })

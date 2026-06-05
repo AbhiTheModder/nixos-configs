@@ -29,10 +29,10 @@
     loupe
     decibels
 
-    gnomeExtensions.focus
+    # gnomeExtensions.focus
     gnomeExtensions.vitals
     gnomeExtensions.app-hider
-    gnomeExtensions.arcmenu
+    # gnomeExtensions.arcmenu
     gnomeExtensions.clipboard-indicator
     gnomeExtensions.color-picker
     gnomeExtensions.compact-top-bar
@@ -40,7 +40,7 @@
     gnomeExtensions.desktop-cube
     gnomeExtensions.do-not-disturb-while-screen-sharing-or-recording
     gnomeExtensions.ideapad-controls
-    gnomeExtensions.open-bar
+    # gnomeExtensions.open-bar
     gnomeExtensions.emoji-copy
     gnomeExtensions.appindicator
     gnomeExtensions.utcclock

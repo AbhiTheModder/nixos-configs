@@ -5,13 +5,10 @@
   buildPackages,
   capstone,
   file,
-  gtk2,
-  gtkdialog,
   libewf,
   libusb-compat-0_1,
   libuv,
   libzip,
-  lua,
   lz4,
   meson,
   ninja,
@@ -20,9 +17,7 @@
   pkg-config,
   python3,
   readline,
-  ruby,
-  vte,
-  xxHash,
+  xxhash,
   zlib,
 }:
 let
@@ -96,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     file
     libzip
-    xxHash
+    xxhash
   ];
 
   postUnpack = ''

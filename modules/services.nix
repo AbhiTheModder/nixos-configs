@@ -3,6 +3,8 @@
 {
   services.printing.enable = true;
 
+  services.tailscale.enable = true;
+
   systemd.user.services.mechvibes-lite = {
     description = "Mechvibes Lite Daemon";
     after = [
