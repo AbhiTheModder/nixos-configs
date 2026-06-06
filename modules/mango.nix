@@ -104,6 +104,9 @@ environment.etc."mango/config.conf".text = ''
     bind=NONE,Return,setkeymode,default
 
     keymode=default
+
+    mousebind=SUPER,btn_left,moveresize,curmove
+    mousebind=SUPER,btn_right,moveresize,curresize
   '';
 
   environment.etc."noctalia/scripts/utc_clock.lua".text = ''
