@@ -49,6 +49,31 @@ environment.etc."mango/config.conf".text = ''
     focuscolor=0x5e81acff
     drag_tile_to_tile=1
     ov_tab_mode=0
+
+    blur=1
+    blur_layer=1
+    blur_optimized=1
+    blur_params_radius=5
+    blur_params_num_passes=2
+    blur_params_noise=0.02
+    blur_params_brightness=0.9
+    blur_params_contrast=0.9
+    blur_params_saturation=1.2
+    shadows=1
+    layer_shadows=0
+    shadow_only_floating=1
+    shadows_size=10
+    shadows_blur=15
+    shadowscolor=0x00000060
+    focused_opacity=0.92
+    unfocused_opacity=0.82
+
+    layerrule=noblur:1,noshadow:1,layer_name:noctalia-bar-default
+    layerrule=noblur:1,noshadow:1,layer_name:noctalia-notification
+    layerrule=noblur:1,noshadow:1,layer_name:noctalia-dock
+    layerrule=noblur:1,noshadow:1,layer_name:noctalia-panel
+    layerrule=noblur:1,noshadow:1,layer_name:noctalia-osd
+
     exec-once=noctalia
 
     bind=Super,Return,spawn,wezterm
@@ -140,6 +165,11 @@ environment.etc."mango/config.conf".text = ''
   '';
 
   environment.etc."noctalia/config.toml".text = ''
+    [shell.panel]
+    transparency_mode = "soft"
+    borders = false
+    shadow = false
+
     [widget.utc-clock]
     type = "scripted"
     script = "/etc/noctalia/scripts/utc_clock.lua"
