@@ -85,6 +85,7 @@ environment.etc."mango/config.conf".text = ''
     bind=SUPER,d,spawn,noctalia msg panel-toggle launcher
     bind=SUPER,s,spawn,noctalia msg panel-toggle control-center
     bind=SUPER,comma,spawn,noctalia msg settings-toggle
+    bind=SUPER,V,spawn,noctalia msg panel-toggle clipboard
 
     bind=NONE,XF86AudioRaiseVolume,spawn,noctalia msg volume-up
     bind=NONE,XF86AudioLowerVolume,spawn,noctalia msg volume-down
