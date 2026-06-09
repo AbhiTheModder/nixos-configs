@@ -48,6 +48,7 @@ environment.etc."mango/config.conf".text = ''
     borderpx=2
     focuscolor=0x5e81acff
     drag_tile_to_tile=1
+    ov_tab_mode=0
     exec-once=noctalia
 
     bind=Super,Return,spawn,wezterm
@@ -86,6 +87,7 @@ environment.etc."mango/config.conf".text = ''
     bind=SUPER,s,spawn,noctalia msg panel-toggle control-center
     bind=SUPER,comma,spawn,noctalia msg settings-toggle
     bind=SUPER,V,spawn,noctalia msg panel-toggle clipboard
+    bindr=SUPER,Super_L,toggleoverview
 
     bind=NONE,XF86AudioRaiseVolume,spawn,noctalia msg volume-up
     bind=NONE,XF86AudioLowerVolume,spawn,noctalia msg volume-down
