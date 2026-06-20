@@ -14,6 +14,7 @@ let
   radare2 = pkgs.callPackage ./radare2.nix { };
   iaito = pkgs.callPackage ./iaito.nix { inherit radare2; };
   bunnylol = pkgs.callPackage ./bunnylol.nix { };
+  wshowkeys = pkgs.callPackage ./wshowkeys.nix { };
 in
 {
   kisesi = kisesi;
@@ -23,4 +24,5 @@ in
   radare2 = radare2;
   iaito = iaito;
   bunnylol = bunnylol;
+  wshowkeys = wshowkeys;
 }

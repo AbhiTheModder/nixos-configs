@@ -40,7 +40,14 @@ in
     gnome-disk-utility
   ];
 
-environment.etc."mango/config.conf".text = ''
+  security.wrappers.wshowkeys = {
+    source = "${pkgs.wshowkeys}/bin/wshowkeys";
+    setuid = true;
+    owner = "root";
+    group = "root";
+  };
+
+  environment.etc."mango/config.conf".text = ''
     cursor_size=32
     cursor_theme=macOS
     trackpad_natural_scrolling=1
@@ -113,6 +120,8 @@ environment.etc."mango/config.conf".text = ''
     bind=SUPER,comma,spawn,noctalia msg settings-toggle
     bind=SUPER,V,spawn,noctalia msg panel-toggle clipboard
     bind=SUPER,O,toggleoverview
+
+    bind=SUPER,K,spawn_shell,pkill wshowkeys || wshowkeys -a bottom -F 'Sans Bold 20' -s '#B5B520ff' -f '#ecd29cff' -b '#201B1488' -l 60
 
     bind=NONE,XF86AudioRaiseVolume,spawn,noctalia msg volume-up
     bind=NONE,XF86AudioLowerVolume,spawn,noctalia msg volume-down

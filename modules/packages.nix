@@ -25,7 +25,7 @@
       nixfmt-rfc-style
       croc
       kdePackages.kdenlive
-      showmethekey
+      wshowkeys
       axel
       ripgrep
       iaito
