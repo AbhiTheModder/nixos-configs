@@ -31,7 +31,7 @@ let
   sdb = fetchFromGitHub {
     owner = "radareorg";
     repo = "sdb";
-    tag = "2.4.2";
+    tag = "2.4.4";
     hash = "sha256-JN27SkDqHtX83d1CPUF9hbVKwE/dwhDgn5MlCX9RPrc=";
   };
 
@@ -44,7 +44,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "6.1.4";
+  version = "6.1.6";
 
   src = fetchFromGitHub {
     owner = "radare";

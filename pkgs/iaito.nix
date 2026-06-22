@@ -14,7 +14,7 @@
 let
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "iaito-unwrapped";
-    version = "6.1.4";
+    version = "6.1.6";
 
     srcs = [
       (fetchFromGitHub {
