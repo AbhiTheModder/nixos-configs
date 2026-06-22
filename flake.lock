@@ -188,6 +188,21 @@
         "type": "github"
       }
     },
+    "radare2": {
+      "locked": {
+        "lastModified": 1782129216,
+        "narHash": "sha256-KEKLaUPWNQpbUPAy/sLreJIRpBjhNxqqv5tHqxArjeI=",
+        "owner": "radareorg",
+        "repo": "radare2",
+        "rev": "d3a31c68d79fb9016a2dac9a29984bc75fe50339",
+        "type": "github"
+      },
+      "original": {
+        "owner": "radareorg",
+        "repo": "radare2",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "fix-python": "fix-python",
@@ -196,6 +211,7 @@
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "noctalia": "noctalia",
+        "radare2": "radare2",
         "zen-browser": "zen-browser"
       }
     },

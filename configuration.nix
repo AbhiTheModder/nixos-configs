@@ -42,6 +42,7 @@ in
     "electron-39.8.10"
   ];
   nixpkgs.overlays = [
+    inputs.radare2.overlays.default
     inputs.ida-pro-overlay.overlays.default
     (import ./pkgs { inherit inputs system; })
   ];

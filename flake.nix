@@ -22,6 +22,9 @@
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell/v5";
     };
+    radare2 = {
+      url = "github:radareorg/radare2";
+    };
   };
 
   outputs =
@@ -33,6 +36,7 @@
       zen-browser,
       mangowm,
       noctalia,
+      radare2,
       ...
     }:
     let
