@@ -14,6 +14,11 @@ let
   iaito = pkgs.callPackage ./iaito.nix { radare2 = final.radare2; };
   bunnylol = pkgs.callPackage ./bunnylol.nix { };
   wshowkeys = pkgs.callPackage ./wshowkeys.nix { };
+  go_1_26_4 = pkgs.callPackage ./go_1_26_4.nix { };
+  buildGo126_4Module = pkgs.callPackage (
+    "${pkgs.path}/pkgs/build-support/go/module.nix"
+  ) { go = go_1_26_4; };
+  crush = pkgs.callPackage ./crush.nix { buildGo126Module = buildGo126_4Module; };
 in
 {
   kisesi = kisesi;
@@ -23,4 +28,5 @@ in
   iaito = iaito;
   bunnylol = bunnylol;
   wshowkeys = wshowkeys;
+  crush = crush;
 }

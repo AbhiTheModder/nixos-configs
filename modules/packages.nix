@@ -45,6 +45,7 @@
       bunnylol
       python3
       python3Packages.pip
+      crush
     ]
     ++ (with pkgsUnstable; [
       android-studio

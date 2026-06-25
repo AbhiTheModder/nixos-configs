@@ -81,6 +81,8 @@ in
     layerrule=noblur:1,noshadow:1,layer_name:noctalia-panel
     layerrule=noblur:1,noshadow:1,layer_name:noctalia-osd
 
+    windowrule=isfloating:1,isoverlay:1,appid:zen,title:Picture-in-Picture
+
     exec-once=noctalia
 
     bind=Super,Return,spawn,wezterm
