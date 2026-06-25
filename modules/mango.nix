@@ -146,15 +146,30 @@ in
     mousebind=SUPER,btn_right,moveresize,curresize
   '';
 
-  environment.etc."noctalia/scripts/utc_clock.lua".text = ''
-    local show_utc = false
+  environment.etc."noctalia/plugins/utc-clock/plugin.toml".text = ''
+    id = "abhi/utc-clock"
+    name = "UTC Clock"
+    version = "1.0.0"
+    min_noctalia = "5.0.0"
+    author = "abhi"
+    description = "Toggle between local and UTC time"
 
-    barWidget.define({
-        label = "UTC Toggle Clock",
-        icon = "clock",
-    })
+    [[widget]]
+    id = "clock"
+    entry = "clock.luau"
+
+      [[widget.setting]]
+      key = "show_utc"
+      type = "bool"
+      label = "Start in UTC"
+      default = false
+  '';
+
+  environment.etc."noctalia/plugins/utc-clock/clock.luau".text = ''
+    local show_utc = barWidget.getConfig("show_utc")
 
     function update()
+        noctalia.setUpdateInterval(1000)
         if show_utc then
             noctalia.runAsync("TZ=UTC date +'%H:%M  %Z'", function(result)
                 barWidget.setText(result.stdout:match("^%s*(.-)%s*$"))
@@ -168,7 +183,7 @@ in
         end
     end
 
-    function onRightClick()
+    function onClick()
         show_utc = not show_utc
     end
   '';
@@ -179,18 +194,16 @@ in
     borders = false
     shadow = false
 
-    [widget.utc-clock]
-    type = "scripted"
-    script = "/etc/noctalia/scripts/utc_clock.lua"
-    hot_reload = true
+    [bar.default]
+    auto_hide = true
+    reserve_space = false
   '';
 
   system.activationScripts.noctalia-config.text = ''
-    mkdir -p /home/abhi/.config/noctalia/scripts
-    cp /etc/noctalia/scripts/utc_clock.lua /home/abhi/.config/noctalia/scripts/utc_clock.lua
-    chown abhi:users /home/abhi/.config/noctalia/scripts/utc_clock.lua
-    cp /etc/noctalia/config.toml /home/abhi/.config/noctalia/config.toml
-    chown abhi:users /home/abhi/.config/noctalia/config.toml
+    mkdir -p /home/abhi/.local/share/noctalia/plugins/utc-clock
+    cp /etc/noctalia/plugins/utc-clock/plugin.toml /home/abhi/.local/share/noctalia/plugins/utc-clock/plugin.toml
+    cp /etc/noctalia/plugins/utc-clock/clock.luau /home/abhi/.local/share/noctalia/plugins/utc-clock/clock.luau
+    chown -R abhi:users /home/abhi/.local/share/noctalia/plugins/utc-clock
   '';
 
   system.activationScripts.mango-config.text = ''

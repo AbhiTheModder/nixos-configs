@@ -42,6 +42,7 @@
     '';
     shellInit = ''
       eval "$(direnv hook bash)"
+      export NIX_CONFIG="access-tokens = github.com=$(${pkgs.gh}/bin/gh auth token)"
     '';
   };
 
