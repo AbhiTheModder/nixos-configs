@@ -1,9 +1,10 @@
-{ pkgs, pkgsUnstable, ... }:
+{ pkgs, pkgsUnstable, inputs, ... }:
 
 {
   environment.systemPackages =
     with pkgs;
     [
+      inputs.wezterm.packages.${pkgs.stdenv.hostPlatform.system}.default
       wget
       git
       gh
@@ -46,6 +47,14 @@
       python3
       python3Packages.pip
       crush
+      yazi
+      archivemount
+      ripdrag
+      ouch
+      adwaita-icon-theme
+      gnome-themes-extra
+      libfaketime
+      google-cloud-sdk
     ]
     ++ (with pkgsUnstable; [
       android-studio
@@ -53,6 +62,5 @@
       ruff
       zed-editor-fhs
       proton-vpn-cli
-      wezterm
     ]);
 }

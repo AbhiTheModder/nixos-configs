@@ -36,7 +36,6 @@ in
   environment.systemPackages = with pkgs; [
     inputs.noctalia.packages.${system}.default
 
-    nautilus
     gnome-disk-utility
   ];
 

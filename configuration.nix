@@ -17,6 +17,8 @@ in
     ./modules/networking.nix
     ./modules/locale.nix
     ./modules/mango.nix
+    ./modules/automount.nix
+    ./modules/filechooser.nix
     ./modules/audio.nix
     ./modules/fonts.nix
     ./modules/virtualization.nix
@@ -33,17 +35,41 @@ in
       "nix-command"
       "flakes"
     ];
-    extra-substituters = [ "https://noctalia.cachix.org" ];
-    extra-trusted-public-keys = [ "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
+    extra-substituters = [
+      "https://noctalia.cachix.org"
+      "https://yazi.cachix.org"
+      "https://wezterm.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+      "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
+      "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
+    ];
   };
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
     "electron-39.8.10"
   ];
+
+  gtk.iconCache.enable = true;
+
+  environment.etc."gtk-3.0/settings.ini".text = ''
+    [Settings]
+    gtk-icon-theme-name=Adwaita
+    gtk-theme-name=Adwaita
+  '';
+
+  environment.etc."gtk-4.0/settings.ini".text = ''
+    [Settings]
+    gtk-icon-theme-name=Adwaita
+    gtk-theme-name=Adwaita
+  '';
+
   nixpkgs.overlays = [
     inputs.radare2.overlays.default
     inputs.ida-pro-overlay.overlays.default
+    inputs.yazi.overlays.default
     (import ./pkgs { inherit inputs system; })
   ];
 

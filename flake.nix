@@ -26,6 +26,14 @@
     radare2 = {
       url = "github:radareorg/radare2";
     };
+    yazi = {
+      url = "github:sxyazi/yazi";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    wezterm = {
+      url = "github:wezterm/wezterm?dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -38,6 +46,8 @@
       mangowm,
       noctalia,
       radare2,
+      yazi,
+      wezterm,
       ...
     }:
     let
