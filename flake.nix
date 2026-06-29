@@ -34,10 +34,14 @@
       url = "github:wezterm/wezterm?dir=nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    helix = {
+      url = "github:helix-editor/helix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    inputs@{
+      inputs@{
       self,
       nixpkgs,
       fix-python,
@@ -48,6 +52,7 @@
       radare2,
       yazi,
       wezterm,
+      helix,
       ...
     }:
     let

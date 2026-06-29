@@ -39,11 +39,13 @@ in
       "https://noctalia.cachix.org"
       "https://yazi.cachix.org"
       "https://wezterm.cachix.org"
+      "https://helix.cachix.org"
     ];
     extra-trusted-public-keys = [
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
       "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
       "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
+      "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
     ];
   };
 
@@ -70,6 +72,7 @@ in
     inputs.radare2.overlays.default
     inputs.ida-pro-overlay.overlays.default
     inputs.yazi.overlays.default
+    inputs.helix.overlays.default
     (import ./pkgs { inherit inputs system; })
   ];
 
