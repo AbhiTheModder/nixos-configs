@@ -12,7 +12,6 @@ let
   zen-browser = import ./zen-browser.nix { inherit inputs system; };
   fix-python = inputs.fix-python.packages.${system}.default;
   iaito = pkgs.callPackage ./iaito.nix { radare2 = final.radare2; };
-  claude-code = pkgs.callPackage ./claude-code.nix { };
   bunnylol = pkgs.callPackage ./bunnylol.nix { };
   wshowkeys = pkgs.callPackage ./wshowkeys.nix { };
   go_1_26_4 = pkgs.callPackage ./go_1_26_4.nix { };
@@ -125,7 +124,6 @@ in
   zen-browser = zen-browser;
   fixPythonPkg = fix-python;
   iaito = iaito;
-  claude-code = claude-code;
   bunnylol = bunnylol;
   wshowkeys = wshowkeys;
   crush = crush;

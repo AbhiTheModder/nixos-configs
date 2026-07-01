@@ -48,7 +48,6 @@
       python3Packages.pip
       crush
       yazi
-      claude-code
       archivemount
       ripdrag
       ouch
