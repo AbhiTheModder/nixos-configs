@@ -2,6 +2,7 @@
 
 {
   hardware.enableRedistributableFirmware = true;
+  hardware.graphics.enable32Bit = true;
 
   services.fprintd.enable = true;
   services.fprintd.tod.enable = true;

@@ -62,5 +62,8 @@
       ruff
       zed-editor-fhs
       proton-vpn-cli
+      (lutris.override {
+        extraLibraries = pkgs: with pkgs; [ vulkan-loader ];
+      })
     ]);
 }
