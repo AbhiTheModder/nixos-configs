@@ -47,6 +47,12 @@ in
   };
 
   environment.etc."mango/config.conf".text = ''
+    monitorrule=name:^HDMI-A-1$,width:3840,height:2160,refresh:60,x:1920,y:0,scale:1.5
+    monitorrule=name:^eDP-1$,width:1920,height:1080,refresh:60,x:0,y:0,scale:1
+
+    env=QT_AUTO_SCREEN_SCALE_FACTOR,1
+    env=GDK_SCALE,1
+
     cursor_size=32
     cursor_theme=macOS
     trackpad_natural_scrolling=1

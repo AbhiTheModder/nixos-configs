@@ -30,7 +30,7 @@ in
   ];
 
   nix.settings = {
-    max-jobs = 8;
+    max-jobs = 4;
     experimental-features = [
       "nix-command"
       "flakes"
