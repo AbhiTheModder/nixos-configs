@@ -39,7 +39,6 @@
       kdePackages.ark
       handbrake
       zen-browser
-      logseq
       onlyoffice-desktopeditors
       upscayl
       mechvibes-lite
