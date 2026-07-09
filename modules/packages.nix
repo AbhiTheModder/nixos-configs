@@ -21,6 +21,7 @@
       vlc
       helix
       wl-clipboard
+      wmenu
       delta
       nixd
       nixfmt-rfc-style

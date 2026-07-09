@@ -10,6 +10,11 @@ in
 
   programs.mango.enable = true;
 
+  xdg.portal.wlr.settings.screencast = {
+    chooser_type = "dmenu";
+    chooser_cmd = "${pkgs.wmenu}/bin/wmenu";
+  };
+
   services.greetd = {
     enable = true;
     settings = {
