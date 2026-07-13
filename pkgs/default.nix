@@ -15,10 +15,10 @@ let
   claude-code = pkgs.callPackage ./claude-code.nix { };
   bunnylol = pkgs.callPackage ./bunnylol.nix { };
   wshowkeys = pkgs.callPackage ./wshowkeys.nix { };
-  go_1_26_4 = pkgs.callPackage ./go_1_26_4.nix { };
+  go_1_26_5 = pkgs.callPackage ./go_1_26_5.nix { };
   buildGo126_4Module = pkgs.callPackage (
     "${pkgs.path}/pkgs/build-support/go/module.nix"
-  ) { go = go_1_26_4; };
+  ) { go = go_1_26_5; };
   crush = pkgs.callPackage ./crush.nix { buildGo126Module = buildGo126_4Module; };
   leaf = pkgs.callPackage ./leaf.nix { };
 

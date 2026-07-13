@@ -5,9 +5,9 @@
 }:
 
 let
-  version = "1.26.4";
+  version = "1.26.5";
   hashes = {
-    linux-amd64 = "sha256-EVPT1Q4Kx2S0R63+BcK88I6InUKgLg/gJZvUf2czrX8=";
+    linux-amd64 = "sha256-XCw7FsrvodloqUwdrKBKfKMBpJbZsIbhetd7uBOT8FM=";
   };
   platform = with stdenv.hostPlatform.go; "${GOOS}-${if GOARCH == "arm" then "armv6l" else GOARCH}";
 in

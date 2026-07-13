@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wqVF0y0oJbWKABOu3hY/Yl/MFilDloci30kFKEQnTKs=";
   };
 
-  cargoHash = "sha256-UgxZ58JJ9nkuGIWF3XlPogjSBKO1YBlyH/DvNOHo2BA=";
+  cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
   buildFeatures = [ "server" "cli" ];
 

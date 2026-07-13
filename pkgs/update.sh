@@ -81,7 +81,7 @@ update_crush() {
   crush_go_version="$(parse_go_mod_version "$go_mod_content")"
   if [[ -n "$crush_go_version" ]]; then
     local current_go_version
-    current_go_version="$(grep -E '^[[:space:]]*version = "' "$PKGS_DIR/go_1_26_4.nix" | head -1 | sed -E 's/.*"([^"]+)".*/\1/')"
+    current_go_version="$(grep -E '^[[:space:]]*version = "' "$PKGS_DIR/go_1_26_5.nix" | head -1 | sed -E 's/.*"([^"]+)".*/\1/')"
     if [[ "$crush_go_version" != "$current_go_version" ]]; then
       echo "crush ${version} requires Go ${crush_go_version}; current pinned Go is ${current_go_version}."
       echo "Run './pkgs/update.sh go' to update the pinned Go package if needed."
@@ -158,7 +158,7 @@ update_claude_code() {
 
 update_go() {
   echo "=== go ==="
-  local file="$PKGS_DIR/go_1_26_4.nix"
+  local file="$PKGS_DIR/go_1_26_5.nix"
   local latest
   latest="$(curl -fsSL 'https://go.dev/dl/?mode=json' | nix run nixpkgs#jq -- -r '.[].version' | grep '^go1.26' | sort -V | tail -1)"
   local version="${latest#go}"
