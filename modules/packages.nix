@@ -49,6 +49,8 @@
       crush
       yazi
       claude-code
+      nb
+      leaf
       archivemount
       ripdrag
       ouch

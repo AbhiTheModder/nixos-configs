@@ -26,4 +26,8 @@
     LADSPA_PATH = "/run/current-system/sw/lib/ladspa";
     _ZO_DOCTOR = "0";
   };
+
+  programs.bash.interactiveShellInit = ''
+    nbv() { leaf "$(nb show "$1" --path)"; }
+  '';
 }
