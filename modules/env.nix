@@ -14,7 +14,6 @@
       "${ANDROID_HOME}/build-tools/36.1.0"
       "${ANDROID_HOME}/cmdline-tools/latest/bin"
       "$HOME/.opencode/bin"
-      "$HOME/.cargo/bin"
       "$HOME/.pub-cache/bin"
       "$WASMER_DIR/bin"
     ];

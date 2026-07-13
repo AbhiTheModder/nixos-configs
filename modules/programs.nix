@@ -23,6 +23,7 @@
       wget = "wget -q --show-progress";
       jjar = "java -jar";
       scrcpy = "scrcpy --render-driver=opengl";
+      node = "bun";
     };
     interactiveShellInit = ''
       nsu() {

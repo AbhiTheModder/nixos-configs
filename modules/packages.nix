@@ -17,7 +17,7 @@
       jdk17
       fixPythonPkg
       eza
-      nodejs
+      bun
       vlc
       helix
       wl-clipboard
