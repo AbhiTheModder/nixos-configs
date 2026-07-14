@@ -83,4 +83,9 @@
     clean.extraArgs = "--keep-since 4d --keep 3";
     flake = "/etc/nixos";
   };
+
+  programs.ssh = {
+    startAgent =  true;
+    agentTimeout = "1h";
+  };
 }
