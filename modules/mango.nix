@@ -30,6 +30,7 @@ in
   };
 
   services.gnome.gnome-keyring.enable = true;
+  services.gnome.gcr-ssh-agent.enable = false;
 
   hardware.bluetooth.enable = true;
   services.upower.enable = true;
