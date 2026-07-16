@@ -128,7 +128,6 @@ in
     bind=Alt,9,tag,9
 
     bind=SUPER,space,spawn,noctalia msg panel-toggle launcher
-    bind=SUPER,d,spawn,noctalia msg panel-toggle launcher
     bind=SUPER,s,spawn,noctalia msg panel-toggle control-center
     bind=SUPER,comma,spawn,noctalia msg settings-toggle
     bind=SUPER,V,spawn,noctalia msg panel-toggle clipboard
