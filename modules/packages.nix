@@ -66,7 +66,7 @@
       zed-editor-fhs
       proton-vpn-cli
       codex
-      antigravity-fhs
+      antigravity-cli
       # (lutris.override {
         # extraLibraries = pkgs: with pkgs; [ vulkan-loader ];
       # })

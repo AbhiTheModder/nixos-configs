@@ -52,6 +52,15 @@ in
     group = "root";
   };
 
+  systemd.tmpfiles.rules = [
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/conservation_mode 0664 root ideapad_laptop"
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/fan_mode 0664 root ideapad_laptop"
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/fn_lock 0664 root ideapad_laptop"
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/touchpad 0664 root ideapad_laptop"
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/camera_power 0664 root ideapad_laptop"
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/usb_charging 0664 root ideapad_laptop"
+  ];
+
   environment.etc."mango/config.conf".text = ''
     monitorrule=name:^HDMI-A-1$,width:3840,height:2160,refresh:60,x:1920,y:0,scale:1.5
     monitorrule=name:^eDP-1$,width:1920,height:1080,refresh:60,x:0,y:0,scale:1
@@ -64,7 +73,7 @@ in
     trackpad_natural_scrolling=1
     border_radius=8
     borderpx=2
-    focuscolor=0x5e81acff
+    focuscolor=0xa5d590ff
     drag_tile_to_tile=1
     ov_tab_mode=0
 
@@ -162,9 +171,8 @@ in
     id = "abhi/utc-clock"
     name = "UTC Clock"
     version = "1.0.0"
-    min_noctalia = "5.0.0"
+    plugin_api = 4
     author = "abhi"
-    description = "Toggle between local and UTC time"
 
     [[widget]]
     id = "clock"
@@ -173,24 +181,28 @@ in
       [[widget.setting]]
       key = "show_utc"
       type = "bool"
-      label = "Start in UTC"
+      label_key = "settings.show_utc.label"
       default = false
   '';
 
   environment.etc."noctalia/plugins/utc-clock/clock.luau".text = ''
-    local show_utc = barWidget.getConfig("show_utc")
+    local show_utc = noctalia.getConfig("show_utc")
 
     function update()
         noctalia.setUpdateInterval(1000)
         if show_utc then
             noctalia.runAsync("TZ=UTC date +'%H:%M  %Z'", function(result)
-                barWidget.setText(result.stdout:match("^%s*(.-)%s*$"))
-                barWidget.setTooltip("Right-click for local time")
+                if result.exitCode == 0 then
+                    barWidget.setText(noctalia.string.trim(result.stdout))
+                    barWidget.setTooltip("Right-click for local time")
+                end
             end)
         else
             noctalia.runAsync("date +'%H:%M'", function(result)
-                barWidget.setText(result.stdout:match("^%s*(.-)%s*$"))
-                barWidget.setTooltip("Right-click for UTC time")
+                if result.exitCode == 0 then
+                    barWidget.setText(noctalia.string.trim(result.stdout))
+                    barWidget.setTooltip("Right-click for UTC time")
+                end
             end)
         end
     end
@@ -198,6 +210,280 @@ in
     function onClick()
         show_utc = not show_utc
     end
+  '';
+
+  environment.etc."noctalia/plugins/utc-clock/translations/en.json".text = ''
+    {
+      "settings.show_utc.label": "Start in UTC"
+    }
+  '';
+
+  environment.etc."noctalia/plugins/ideapad-controls/plugin.toml".text = ''
+    id = "abhi/ideapad-controls"
+    name = "IdeaPad Controls"
+    version = "1.0.0"
+    plugin_api = 4
+    author = "abhi"
+    description = "Control Lenovo IdeaPad laptop features"
+    icon = "laptop"
+
+    [[widget]]
+    id = "status"
+    entry = "widget.luau"
+
+      [[widget.setting]]
+      key = "default_option"
+      type = "select"
+      label_key = "settings.default_option.label"
+      default = "conservation_mode"
+      options = [
+        { value = "conservation_mode", label_key = "option.conservation_mode" },
+        { value = "fan_mode", label_key = "option.fan_mode" },
+        { value = "fn_lock", label_key = "option.fn_lock" },
+        { value = "usb_charging", label_key = "option.usb_charging" },
+      ]
+
+    [[panel]]
+    id = "control"
+    entry = "panel.luau"
+    width = 320
+    height = 300
+    placement = "attached"
+    position = "auto"
+    open_near_click = true
+  '';
+
+  environment.etc."noctalia/plugins/ideapad-controls/widget.luau".text = ''
+    local default_option = noctalia.getConfig("default_option")
+
+    local OPTIONS = {"conservation_mode", "fan_mode", "fn_lock", "usb_charging"}
+    local GLYPHS = {
+      conservation_mode = "battery-charging",
+      fan_mode = "fan",
+      fn_lock = "keyboard",
+      usb_charging = "usb",
+    }
+    local LABELS = {
+      conservation_mode = "Cons",
+      fan_mode = "Fan",
+      fn_lock = "FnLk",
+      usb_charging = "USB",
+    }
+
+    local sysfs_base = ""
+    local available = {}
+    local current_option = ""
+    local current_value = "0"
+
+    local function detect()
+      local entries = noctalia.listDir("/sys/bus/platform/drivers/ideapad_acpi")
+      if entries == nil then return end
+      for _, entry in ipairs(entries) do
+        if entry ~= "bind" and entry ~= "unbind" and entry ~= "module" and entry ~= "uevent" then
+          local path = "/sys/bus/platform/drivers/ideapad_acpi/" .. entry .. "/"
+          if noctalia.fileExists(path .. "conservation_mode") or noctalia.fileExists(path .. "fn_lock") then
+            sysfs_base = path
+            break
+          end
+        end
+      end
+      if sysfs_base == "" then return end
+      for _, opt in ipairs(OPTIONS) do
+        if noctalia.fileExists(sysfs_base .. opt) then
+          table.insert(available, opt)
+        end
+      end
+    end
+
+    local function readOption(opt)
+      local content = noctalia.readFile(sysfs_base .. opt)
+      if content then
+        return noctalia.string.trim(content)
+      end
+      return nil
+    end
+
+    local function writeOption(opt, value)
+      noctalia.writeFile(sysfs_base .. opt, value)
+    end
+
+    detect()
+
+    if #available == 0 then
+      barWidget.setText("No IdeaPad")
+      barWidget.setTooltip("No IdeaPad sysfs nodes found")
+    else
+      local found = false
+      for _, opt in ipairs(available) do
+        if opt == default_option then
+          current_option = default_option
+          found = true
+          break
+        end
+      end
+      if not found then
+        current_option = available[1]
+      end
+    end
+
+    function update()
+      if current_option == "" then return end
+      noctalia.setUpdateInterval(5000)
+      local val = readOption(current_option)
+      if val then
+        current_value = val
+        barWidget.setGlyph(GLYPHS[current_option] or "laptop")
+        if val == "1" then
+          barWidget.setGlyphColor("primary", "normal")
+          barWidget.setText(LABELS[current_option] .. " ON")
+        else
+          barWidget.setGlyphColor("disabled", "normal")
+          barWidget.setText(LABELS[current_option] .. " OFF")
+        end
+        barWidget.setTooltip("Click to toggle " .. (LABELS[current_option] or current_option) .. "\nRight-click for all options")
+      end
+    end
+
+    function onClick()
+      if current_option == "" then return end
+      local new_val = current_value == "1" and "0" or "1"
+      writeOption(current_option, new_val)
+      current_value = new_val
+      update()
+    end
+
+    function onRightClick()
+      noctalia.togglePanel("abhi/ideapad-controls:control")
+    end
+  '';
+
+  environment.etc."noctalia/plugins/ideapad-controls/panel.luau".text = ''
+    local OPTIONS = {"conservation_mode", "fan_mode", "fn_lock", "usb_charging"}
+    local LABELS = {
+      conservation_mode = "Conservation Mode",
+      fan_mode = "Fan Mode",
+      fn_lock = "Fn Lock",
+      usb_charging = "USB Charging",
+    }
+    local GLYPHS = {
+      conservation_mode = "battery-charging",
+      fan_mode = "fan",
+      fn_lock = "keyboard",
+      usb_charging = "usb",
+    }
+
+    local sysfs_base = ""
+    local available = {}
+    local states = {}
+
+    local function detect()
+      local entries = noctalia.listDir("/sys/bus/platform/drivers/ideapad_acpi")
+      if entries == nil then return end
+      for _, entry in ipairs(entries) do
+        if entry ~= "bind" and entry ~= "unbind" and entry ~= "module" and entry ~= "uevent" then
+          local path = "/sys/bus/platform/drivers/ideapad_acpi/" .. entry .. "/"
+          if noctalia.fileExists(path .. "conservation_mode") or noctalia.fileExists(path .. "fn_lock") then
+            sysfs_base = path
+            break
+          end
+        end
+      end
+      if sysfs_base == "" then return end
+      for _, opt in ipairs(OPTIONS) do
+        if noctalia.fileExists(sysfs_base .. opt) then
+          table.insert(available, opt)
+        end
+      end
+    end
+
+    local function readOption(opt)
+      local content = noctalia.readFile(sysfs_base .. opt)
+      if content then
+        return noctalia.string.trim(content)
+      end
+      return nil
+    end
+
+    local function writeOption(opt, value)
+      noctalia.writeFile(sysfs_base .. opt, value)
+    end
+
+    local function refreshStates()
+      for _, opt in ipairs(available) do
+        local val = readOption(opt)
+        states[opt] = val == "1"
+      end
+    end
+
+    detect()
+
+    local function buildTree()
+      local header = {
+        ui.label({ text = "IdeaPad Controls", fontSize = 16, fontWeight = "bold", color = "on_surface" }),
+        ui.separator({}),
+      }
+      local rows = {}
+      for _, opt in ipairs(available) do
+        local label = LABELS[opt] or opt
+        local isOn = states[opt] or false
+        table.insert(rows, ui.row({ gap = 12, align = "center" }, {
+          ui.label({ text = label, flexGrow = 1 }),
+          ui.toggle({ checked = isOn, onChange = "toggle_" .. opt }),
+        }))
+      end
+      local all = {}
+      for _, h in ipairs(header) do
+        table.insert(all, h)
+      end
+      for _, r in ipairs(rows) do
+        table.insert(all, r)
+      end
+      return ui.column({ gap = 16 }, all)
+    end
+
+    function onOpen()
+      refreshStates()
+      panel.render(buildTree())
+    end
+
+    function toggle_conservation_mode(value)
+      states["conservation_mode"] = value == "true"
+      writeOption("conservation_mode", value == "true" and "1" or "0")
+      panel.render(buildTree())
+    end
+    function toggle_fan_mode(value)
+      states["fan_mode"] = value == "true"
+      writeOption("fan_mode", value == "true" and "1" or "0")
+      panel.render(buildTree())
+    end
+    function toggle_fn_lock(value)
+      states["fn_lock"] = value == "true"
+      writeOption("fn_lock", value == "true" and "1" or "0")
+      panel.render(buildTree())
+    end
+    function toggle_usb_charging(value)
+      states["usb_charging"] = value == "true"
+      writeOption("usb_charging", value == "true" and "1" or "0")
+      panel.render(buildTree())
+    end
+
+    function update()
+      noctalia.setUpdateInterval(5000)
+      if #available > 0 then
+        refreshStates()
+        panel.render(buildTree())
+      end
+    end
+  '';
+
+  environment.etc."noctalia/plugins/ideapad-controls/translations/en.json".text = ''
+    {
+      "settings.default_option.label": "Default option to display",
+      "option.conservation_mode": "Conservation Mode",
+      "option.fan_mode": "Fan Mode",
+      "option.fn_lock": "Fn Lock",
+      "option.usb_charging": "USB Charging"
+    }
   '';
 
   environment.etc."noctalia/config.toml".text = ''
@@ -212,10 +498,18 @@ in
   '';
 
   system.activationScripts.noctalia-config.text = ''
-    mkdir -p /home/abhi/.local/share/noctalia/plugins/utc-clock
+    mkdir -p /home/abhi/.local/share/noctalia/plugins/utc-clock/translations
     cp /etc/noctalia/plugins/utc-clock/plugin.toml /home/abhi/.local/share/noctalia/plugins/utc-clock/plugin.toml
     cp /etc/noctalia/plugins/utc-clock/clock.luau /home/abhi/.local/share/noctalia/plugins/utc-clock/clock.luau
+    cp /etc/noctalia/plugins/utc-clock/translations/en.json /home/abhi/.local/share/noctalia/plugins/utc-clock/translations/en.json
     chown -R abhi:users /home/abhi/.local/share/noctalia/plugins/utc-clock
+
+    mkdir -p /home/abhi/.local/share/noctalia/plugins/ideapad-controls/translations
+    cp /etc/noctalia/plugins/ideapad-controls/plugin.toml /home/abhi/.local/share/noctalia/plugins/ideapad-controls/plugin.toml
+    cp /etc/noctalia/plugins/ideapad-controls/widget.luau /home/abhi/.local/share/noctalia/plugins/ideapad-controls/widget.luau
+    cp /etc/noctalia/plugins/ideapad-controls/panel.luau /home/abhi/.local/share/noctalia/plugins/ideapad-controls/panel.luau
+    cp /etc/noctalia/plugins/ideapad-controls/translations/en.json /home/abhi/.local/share/noctalia/plugins/ideapad-controls/translations/en.json
+    chown -R abhi:users /home/abhi/.local/share/noctalia/plugins/ideapad-controls
   '';
 
   system.activationScripts.mango-config.text = ''

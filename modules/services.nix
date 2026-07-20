@@ -31,4 +31,9 @@
       RestartSec = "3s";
     };
   };
+
+  services.tor = {
+    enable = true;
+    client.enable = true;
+  };
 }
