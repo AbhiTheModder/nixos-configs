@@ -73,7 +73,7 @@ in
     trackpad_natural_scrolling=1
     border_radius=8
     borderpx=2
-    focuscolor=0xa5d590ff
+    focuscolor=0xfeb0c0ff
     drag_tile_to_tile=1
     ov_tab_mode=0
 

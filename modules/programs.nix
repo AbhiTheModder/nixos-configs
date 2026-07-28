@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgsUnstable, ... }:
 
 {
   programs.ghidra.enable = true;
@@ -15,6 +15,7 @@
       rebuild = "nh os switch";
       reclean = "sudo rm /nix/var/nix/profiles/system-* && nh os boot";
       reboot = "sudo reboot";
+      reopt = "nix-store --optimize -vv";
       cat = "bat";
       vi = "hx";
       ls = "eza --icons";
@@ -47,6 +48,11 @@
     '';
   };
 
+  programs.atuin = {
+    enable = true;
+    package = pkgsUnstable.atuin;
+  };
+  environment.etc."atuin/config.toml".text = "";
   programs.zoxide.enable = true;
   programs.bat.enable = true;
   programs.nix-ld.enable = true;
