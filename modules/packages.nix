@@ -5,6 +5,7 @@
     with pkgs;
     [
       inputs.wezterm.packages.${pkgs.stdenv.hostPlatform.system}.default
+      inputs.xytz.packages.${pkgs.stdenv.hostPlatform.system}.default
       wget
       git
       gh

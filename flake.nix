@@ -38,6 +38,7 @@
       url = "github:helix-editor/helix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    xytz.url = "github:xdagiz/xytz";
   };
 
   outputs =
