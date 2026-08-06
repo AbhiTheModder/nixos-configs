@@ -13,6 +13,7 @@
       "video"
       "render"
       "input"
+      "i2c"
       "ideapad_laptop"
     ];
     packages = [

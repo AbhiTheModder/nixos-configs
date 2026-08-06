@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Update script for custom packages in pkgs/
-# Usage: ./pkgs/update.sh [package-name]
+# Usage: ./scripts/update.sh [package-name]
 # Without args, updates all known packages except the pinned Go toolchain.
-# Run './pkgs/update.sh go' explicitly when crush's go.mod requires a new Go version.
+# Run './scripts/update.sh go' explicitly when crush's go.mod requires a new Go version.
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PKGS_DIR="$REPO_ROOT/pkgs"
@@ -84,7 +84,7 @@ update_crush() {
     current_go_version="$(grep -E '^[[:space:]]*version = "' "$PKGS_DIR/go_1_26_5.nix" | head -1 | sed -E 's/.*"([^"]+)".*/\1/')"
     if [[ "$crush_go_version" != "$current_go_version" ]]; then
       echo "crush ${version} requires Go ${crush_go_version}; current pinned Go is ${current_go_version}."
-      echo "Run './pkgs/update.sh go' to update the pinned Go package if needed."
+      echo "Run './scripts/update.sh go' to update the pinned Go package if needed."
     fi
   fi
 

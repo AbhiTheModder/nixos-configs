@@ -73,7 +73,6 @@ in
     trackpad_natural_scrolling=1
     border_radius=8
     borderpx=2
-    focuscolor=0xfeb0c0ff
     drag_tile_to_tile=1
     ov_tab_mode=0
 
@@ -85,13 +84,16 @@ in
     blur_params_noise=0.02
     blur_params_brightness=0.9
     blur_params_contrast=0.9
-    blur_params_saturation=1.2
+    blur_params_saturation=1.0
+    layer_animations=0
     shadows=1
     layer_shadows=0
-    shadow_only_floating=1
-    shadows_size=10
-    shadows_blur=15
-    shadowscolor=0x00000060
+    shadow_only_floating=0
+    shadows_size=4
+    shadows_blur=12
+    shadows_position_x=2
+    shadows_position_y=2
+    shadowscolor=0x000000ff
     focused_opacity=0.92
     unfocused_opacity=0.82
 
@@ -148,8 +150,8 @@ in
     bind=NONE,XF86AudioLowerVolume,spawn,noctalia msg volume-down
     bind=NONE,XF86AudioMute,spawn,noctalia msg volume-mute
     bind=NONE,XF86AudioMicMute,spawn,noctalia msg mic-mute
-    bind=NONE,XF86MonBrightnessUp,spawn,noctalia msg brightness-up
-    bind=NONE,XF86MonBrightnessDown,spawn,noctalia msg brightness-down
+    bind=NONE,XF86MonBrightnessUp,spawn_shell,noctalia msg brightness-up eDP-1; ddcutil --bus 3 setvcp 10 + 20
+    bind=NONE,XF86MonBrightnessDown,spawn_shell,noctalia msg brightness-down eDP-1; ddcutil --bus 3 setvcp 10 - 20
     bind=NONE,Print,spawn,noctalia msg screenshot-region
     bind=SHIFT,Print,spawn,noctalia msg screenshot-fullscreen
 
@@ -165,6 +167,8 @@ in
 
     mousebind=SUPER,btn_left,moveresize,curmove
     mousebind=SUPER,btn_right,moveresize,curresize
+
+    source-optional=~/.config/mango/noctalia.conf
   '';
 
   environment.etc."noctalia/plugins/utc-clock/plugin.toml".text = ''
@@ -486,6 +490,11 @@ in
     }
   '';
 
+  environment.etc."noctalia/mango-reload.toml".text = ''
+    [hooks]
+    wallpaper_changed = "mmsg dispatch reload_config"
+  '';
+
   environment.etc."noctalia/config.toml".text = ''
     [shell.panel]
     transparency_mode = "soft"
@@ -495,9 +504,15 @@ in
     [bar.default]
     auto_hide = true
     reserve_space = false
+    shadow = false
+    contact_shadow = false
   '';
 
   system.activationScripts.noctalia-config.text = ''
+    mkdir -p /home/abhi/.config/noctalia
+    cp /etc/noctalia/mango-reload.toml /home/abhi/.config/noctalia/mango-reload.toml
+    chown abhi:users /home/abhi/.config/noctalia/mango-reload.toml
+
     mkdir -p /home/abhi/.local/share/noctalia/plugins/utc-clock/translations
     cp /etc/noctalia/plugins/utc-clock/plugin.toml /home/abhi/.local/share/noctalia/plugins/utc-clock/plugin.toml
     cp /etc/noctalia/plugins/utc-clock/clock.luau /home/abhi/.local/share/noctalia/plugins/utc-clock/clock.luau

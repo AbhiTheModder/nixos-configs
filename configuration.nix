@@ -24,6 +24,7 @@ in
     ./modules/virtualization.nix
     ./modules/programs.nix
     ./modules/packages.nix
+    ./modules/wezterm.nix
     ./modules/users.nix
     ./modules/env.nix
     ./modules/services.nix

@@ -23,6 +23,7 @@
       helix
       wl-clipboard
       wmenu
+      ddcutil
       delta
       nixd
       nixfmt-rfc-style
