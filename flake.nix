@@ -26,6 +26,7 @@
     radare2 = {
       url = "github:radareorg/radare2";
     };
+    flyline.url = "github:AbhiTheModder/flyline";
     yazi = {
       url = "github:sxyazi/yazi";
       inputs.nixpkgs.follows = "nixpkgs";

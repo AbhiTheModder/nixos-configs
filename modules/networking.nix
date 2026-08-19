@@ -1,16 +1,20 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   networking.hostName = "btw";
   networking.wireless.enable = lib.mkForce false;
 
   networking.networkmanager.enable = true;
+  networking.networkmanager.unmanaged = [ "interface-name:wg0" ];
   networking.networkmanager.wifi = {
     powersave = false;
     backend = "iwd";
     macAddress = "stable";
   };
   networking.resolvconf.enable = true;
+
+  networking.wg-quick.interfaces.wg0.configFile =
+    "${config.users.users.abhi.home}/.config/nixos/wireguard-wg0.conf";
 
   system.activationScripts.local-hosts = {
     text = ''

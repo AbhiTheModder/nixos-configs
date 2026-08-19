@@ -10,6 +10,7 @@ let
 in
 {
   imports = [
+    inputs.flyline.nixosModules.default
     ./hardware-configuration.nix
 
     ./modules/boot.nix

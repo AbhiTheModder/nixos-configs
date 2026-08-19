@@ -1,7 +1,9 @@
-{ pkgs, pkgsUnstable, ... }:
+{ lib, pkgs, pkgsUnstable, ... }:
 
 {
   programs.ghidra.enable = true;
+
+  programs.flyline.enable = true;
 
   programs.xonsh = {
     enable = true;
@@ -9,7 +11,6 @@
   };
 
   programs.bash = {
-    blesh.enable = true;
     shellAliases = {
       cd = "z";
       rebuild = "nh os switch";
@@ -26,7 +27,7 @@
       scrcpy = "scrcpy --render-driver=opengl";
       node = "bun";
     };
-    interactiveShellInit = ''
+    interactiveShellInit = lib.mkOrder 2000 ''
       nsu() {
         if [ $# -eq 0 ]; then
           echo "Usage: nsu <package-name>"
@@ -34,6 +35,11 @@
         fi
         NIXPKGS_ALLOW_UNFREE=1 nix shell --impure "github:NixOS/nixpkgs/nixos-unstable#$1"
       }
+
+      # Flyline replaces readline, so route Atuin's search widgets through
+      # Flyline's documented Bash-command action.
+      flyline key bind Ctrl+r 'always=runBashCommand(__atuin_widget_run)+submitOrNewline'
+      flyline key bind Up 'editingBufferMode+cursorOnFirstLine=runBashCommand("__atuin_history --shell-up-key-binding --keymap-mode=emacs")'
     '';
     promptInit = ''
       : "$PROMPT_COMMAND:="
