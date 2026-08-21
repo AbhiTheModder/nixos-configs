@@ -69,6 +69,7 @@
       proton-vpn-cli
       codex
       antigravity-cli
+      pi-coding-agent
       # (lutris.override {
         # extraLibraries = pkgs: with pkgs; [ vulkan-loader ];
       # })

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "leaf";
-  version = "1.26.1";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "RivoLink";
     repo = "leaf";
     rev = version;
-    hash = "sha256-faZ3yiAdPbN1Pxf7Gss62eYUJzaJ3ZF5BZyCVqHOC4s=";
+    hash = "sha256-eCSGZ+fBc1fxVBQdZgpZYkop2mO1mVPDylXIVK/C2JE=";
   };
 
-  cargoHash = "sha256-evHpyavHLJxStN8ZYDetwzxh18eQX9Nq3KL3kudk7dI=";
+  cargoHash = "sha256-B0hYSG00C3my2TcGE+rfziTW9r3HZH+8MAHFQq6uiIk=";
 
   meta = {
     description = "A friendly terminal Markdown previewer";
