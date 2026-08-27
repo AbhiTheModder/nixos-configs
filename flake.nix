@@ -26,7 +26,7 @@
     radare2 = {
       url = "github:radareorg/radare2";
     };
-    flyline.url = "github:AbhiTheModder/flyline";
+    flyline.url = "github:HalFrgrd/flyline";
     yazi = {
       url = "github:sxyazi/yazi";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -40,6 +40,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     xytz.url = "github:xdagiz/xytz";
+    fagram.url = "github:fagramdesktop/fadesktop";
+    noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
   };
 
   outputs =

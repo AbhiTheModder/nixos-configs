@@ -1,67 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{ pkgs, inputs, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
-in
-{
-  imports = [
-    inputs.mangowm.nixosModules.mango
-  ];
 
-  programs.mango.enable = true;
-
-  xdg.portal.wlr.settings.screencast = {
-    chooser_type = "dmenu";
-    chooser_cmd = "${pkgs.wmenu}/bin/wmenu";
-  };
-
-  services.greetd = {
-    enable = true;
-    settings = {
-      initial_session = {
-        command = "mango";
-        user = "abhi";
-      };
-      default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --cmd mango";
-        user = "greeter";
-      };
-    };
-  };
-
-  services.gnome.gnome-keyring.enable = true;
-  services.gnome.gcr-ssh-agent.enable = false;
-
-  hardware.bluetooth.enable = true;
-  services.upower.enable = true;
-  services.power-profiles-daemon.enable = true;
-
-  xdg.terminal-exec.enable = true;
-  xdg.terminal-exec.settings.default = [ "org.wezfurlong.wezterm.desktop" ];
-
-  environment.systemPackages = with pkgs; [
-    inputs.noctalia.packages.${system}.default
-
-    gnome-disk-utility
-  ];
-
-  security.wrappers.wshowkeys = {
-    source = "${pkgs.wshowkeys}/bin/wshowkeys";
-    setuid = true;
-    owner = "root";
-    group = "root";
-  };
-
-  systemd.tmpfiles.rules = [
-    "z /sys/bus/platform/drivers/ideapad_acpi/*/conservation_mode 0664 root ideapad_laptop"
-    "z /sys/bus/platform/drivers/ideapad_acpi/*/fan_mode 0664 root ideapad_laptop"
-    "z /sys/bus/platform/drivers/ideapad_acpi/*/fn_lock 0664 root ideapad_laptop"
-    "z /sys/bus/platform/drivers/ideapad_acpi/*/touchpad 0664 root ideapad_laptop"
-    "z /sys/bus/platform/drivers/ideapad_acpi/*/camera_power 0664 root ideapad_laptop"
-    "z /sys/bus/platform/drivers/ideapad_acpi/*/usb_charging 0664 root ideapad_laptop"
-  ];
-
-  environment.etc."mango/config.conf".text = ''
+  mangoConfig = pkgs.writeText "mango-config.conf" ''
     monitorrule=name:^HDMI-A-1$,width:3840,height:2160,refresh:60,x:1920,y:0,scale:1.5
     monitorrule=name:^eDP-1$,width:1920,height:1080,refresh:60,x:0,y:0,scale:1
 
@@ -171,7 +113,69 @@ in
     source-optional=~/.config/mango/noctalia.conf
   '';
 
-  environment.etc."noctalia/plugins/utc-clock/plugin.toml".text = ''
+  mangoReload = pkgs.writeText "mango-reload.toml" ''
+    [hooks]
+    wallpaper_changed = "mmsg dispatch reload_config"
+  '';
+
+  noctaliaConfig = pkgs.writeText "noctalia-config.toml" ''
+    [shell]
+    font_family = "Maple Mono NF CN"
+    show_location = false
+    polkit_agent = true
+
+    [shell.greeter_sync]
+    auto_sync = true
+
+    [shell.panel]
+    transparency_mode = "soft"
+    borders = false
+    shadow = false
+
+    [shell.screenshot]
+    directory = "/home/abhi/Pictures/Screenshots"
+
+    [bar.default]
+    auto_hide = true
+    reserve_space = false
+    shadow = false
+    contact_shadow = false
+
+    [calendar]
+    enabled = true
+
+    [calendar.account.work_google]
+    type = "google"
+    name = "Work"
+
+    [calendar.account.personal_google]
+    type = "google"
+    name = "Abhi"
+
+    [calendar.account.wmd_google]
+    type = "google"
+    name = "WMD"
+
+    [location]
+    auto_locate = false
+    address = "Chennai, IN"
+
+    [weather]
+    enabled = false
+
+    [nightlight]
+    enabled = true
+    force = true
+
+    [theme]
+    source = "wallpaper"
+    wallpaper_scheme = "m3-tonal-spot"
+
+    [wallpaper]
+    directory = "/home/abhi/Pictures/walls"
+  '';
+
+  utcClockPluginToml = pkgs.writeText "utc-clock-plugin.toml" ''
     id = "abhi/utc-clock"
     name = "UTC Clock"
     version = "1.0.0"
@@ -189,7 +193,7 @@ in
       default = false
   '';
 
-  environment.etc."noctalia/plugins/utc-clock/clock.luau".text = ''
+  utcClockLuau = pkgs.writeText "utc-clock-clock.luau" ''
     local show_utc = noctalia.getConfig("show_utc")
 
     function update()
@@ -216,13 +220,13 @@ in
     end
   '';
 
-  environment.etc."noctalia/plugins/utc-clock/translations/en.json".text = ''
+  utcClockEnJson = pkgs.writeText "utc-clock-en.json" ''
     {
       "settings.show_utc.label": "Start in UTC"
     }
   '';
 
-  environment.etc."noctalia/plugins/ideapad-controls/plugin.toml".text = ''
+  ideapadPluginToml = pkgs.writeText "ideapad-plugin.toml" ''
     id = "abhi/ideapad-controls"
     name = "IdeaPad Controls"
     version = "1.0.0"
@@ -257,7 +261,7 @@ in
     open_near_click = true
   '';
 
-  environment.etc."noctalia/plugins/ideapad-controls/widget.luau".text = ''
+  ideapadWidgetLuau = pkgs.writeText "ideapad-widget.luau" ''
     local default_option = noctalia.getConfig("default_option")
 
     local OPTIONS = {"conservation_mode", "fan_mode", "fn_lock", "usb_charging"}
@@ -361,7 +365,7 @@ in
     end
   '';
 
-  environment.etc."noctalia/plugins/ideapad-controls/panel.luau".text = ''
+  ideapadPanelLuau = pkgs.writeText "ideapad-panel.luau" ''
     local OPTIONS = {"conservation_mode", "fan_mode", "fn_lock", "usb_charging"}
     local LABELS = {
       conservation_mode = "Conservation Mode",
@@ -480,7 +484,7 @@ in
     end
   '';
 
-  environment.etc."noctalia/plugins/ideapad-controls/translations/en.json".text = ''
+  ideapadEnJson = pkgs.writeText "ideapad-en.json" ''
     {
       "settings.default_option.label": "Default option to display",
       "option.conservation_mode": "Conservation Mode",
@@ -489,47 +493,75 @@ in
       "option.usb_charging": "USB Charging"
     }
   '';
+in
+{
+  imports = [
+    inputs.mangowm.nixosModules.mango
+    inputs.noctalia-greeter.nixosModules.default
+  ];
 
-  environment.etc."noctalia/mango-reload.toml".text = ''
-    [hooks]
-    wallpaper_changed = "mmsg dispatch reload_config"
-  '';
+  programs.mango.enable = true;
 
-  environment.etc."noctalia/config.toml".text = ''
-    [shell.panel]
-    transparency_mode = "soft"
-    borders = false
-    shadow = false
+  xdg.portal.wlr.settings.screencast = {
+    chooser_type = "dmenu";
+    chooser_cmd = "${pkgs.wmenu}/bin/wmenu";
+  };
 
-    [bar.default]
-    auto_hide = true
-    reserve_space = false
-    shadow = false
-    contact_shadow = false
-  '';
+  programs.noctalia-greeter = {
+    enable = true;
+    settings = {
+      session.default = "Mango";
+      cursor = {
+        theme = "macOS";
+        size = 32;
+        path = "${pkgs.apple-cursor}/share/icons";
+      };
+    };
+  };
 
-  system.activationScripts.noctalia-config.text = ''
-    mkdir -p /home/abhi/.config/noctalia
-    cp /etc/noctalia/mango-reload.toml /home/abhi/.config/noctalia/mango-reload.toml
-    chown abhi:users /home/abhi/.config/noctalia/mango-reload.toml
+  services.gnome.gnome-keyring.enable = true;
+  services.gnome.gcr-ssh-agent.enable = false;
 
-    mkdir -p /home/abhi/.local/share/noctalia/plugins/utc-clock/translations
-    cp /etc/noctalia/plugins/utc-clock/plugin.toml /home/abhi/.local/share/noctalia/plugins/utc-clock/plugin.toml
-    cp /etc/noctalia/plugins/utc-clock/clock.luau /home/abhi/.local/share/noctalia/plugins/utc-clock/clock.luau
-    cp /etc/noctalia/plugins/utc-clock/translations/en.json /home/abhi/.local/share/noctalia/plugins/utc-clock/translations/en.json
-    chown -R abhi:users /home/abhi/.local/share/noctalia/plugins/utc-clock
+  hardware.bluetooth.enable = true;
+  services.upower.enable = true;
+  services.power-profiles-daemon.enable = true;
 
-    mkdir -p /home/abhi/.local/share/noctalia/plugins/ideapad-controls/translations
-    cp /etc/noctalia/plugins/ideapad-controls/plugin.toml /home/abhi/.local/share/noctalia/plugins/ideapad-controls/plugin.toml
-    cp /etc/noctalia/plugins/ideapad-controls/widget.luau /home/abhi/.local/share/noctalia/plugins/ideapad-controls/widget.luau
-    cp /etc/noctalia/plugins/ideapad-controls/panel.luau /home/abhi/.local/share/noctalia/plugins/ideapad-controls/panel.luau
-    cp /etc/noctalia/plugins/ideapad-controls/translations/en.json /home/abhi/.local/share/noctalia/plugins/ideapad-controls/translations/en.json
-    chown -R abhi:users /home/abhi/.local/share/noctalia/plugins/ideapad-controls
-  '';
+  xdg.terminal-exec.enable = true;
+  xdg.terminal-exec.settings.default = [ "org.wezfurlong.wezterm.desktop" ];
 
-  system.activationScripts.mango-config.text = ''
-    mkdir -p /home/abhi/.config/mango
-    cp /etc/mango/config.conf /home/abhi/.config/mango/config.conf
-    chown abhi:users /home/abhi/.config/mango/config.conf
-  '';
+  environment.systemPackages = with pkgs; [
+    inputs.noctalia.packages.${system}.default
+
+    gnome-disk-utility
+  ];
+
+  security.wrappers.wshowkeys = {
+    source = "${pkgs.wshowkeys}/bin/wshowkeys";
+    setuid = true;
+    owner = "root";
+    group = "root";
+  };
+
+  systemd.tmpfiles.rules = [
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/conservation_mode 0664 root ideapad_laptop"
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/fan_mode 0664 root ideapad_laptop"
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/fn_lock 0664 root ideapad_laptop"
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/touchpad 0664 root ideapad_laptop"
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/camera_power 0664 root ideapad_laptop"
+    "z /sys/bus/platform/drivers/ideapad_acpi/*/usb_charging 0664 root ideapad_laptop"
+    "d /home/abhi/.config/noctalia 0755 abhi users -"
+    "d /home/abhi/.config/mango 0755 abhi users -"
+    "d /home/abhi/.local/share/noctalia/plugins/utc-clock/translations 0755 abhi users -"
+    "d /home/abhi/.local/share/noctalia/plugins/ideapad-controls/translations 0755 abhi users -"
+    "L+ /home/abhi/.config/noctalia/config.toml - - - - ${noctaliaConfig}"
+    "L+ /home/abhi/.config/noctalia/mango-reload.toml - - - - ${mangoReload}"
+    "L+ /home/abhi/.local/share/noctalia/plugins/utc-clock/plugin.toml - - - - ${utcClockPluginToml}"
+    "L+ /home/abhi/.local/share/noctalia/plugins/utc-clock/clock.luau - - - - ${utcClockLuau}"
+    "L+ /home/abhi/.local/share/noctalia/plugins/utc-clock/translations/en.json - - - - ${utcClockEnJson}"
+    "L+ /home/abhi/.local/share/noctalia/plugins/ideapad-controls/plugin.toml - - - - ${ideapadPluginToml}"
+    "L+ /home/abhi/.local/share/noctalia/plugins/ideapad-controls/widget.luau - - - - ${ideapadWidgetLuau}"
+    "L+ /home/abhi/.local/share/noctalia/plugins/ideapad-controls/panel.luau - - - - ${ideapadPanelLuau}"
+    "L+ /home/abhi/.local/share/noctalia/plugins/ideapad-controls/translations/en.json - - - - ${ideapadEnJson}"
+    "L+ /home/abhi/.config/mango/config.conf - - - - ${mangoConfig}"
+  ];
 }

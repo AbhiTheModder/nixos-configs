@@ -1,4 +1,4 @@
-{ pkgsUnstable, ... }:
+{ pkgs, inputs, ... }:
 
 {
   users.groups.ideapad_laptop = {};
@@ -17,7 +17,7 @@
       "ideapad_laptop"
     ];
     packages = [
-      pkgsUnstable.telegram-desktop
+      inputs.fagram.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
 }

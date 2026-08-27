@@ -34,7 +34,6 @@
       ripgrep
       iaito
       jadx
-      frida-tools
       burpsuite
       imhex
       ida-pro
@@ -42,7 +41,6 @@
       kdePackages.ark
       handbrake
       zen-browser
-      onlyoffice-desktopeditors
       upscayl
       mechvibes-lite
       bunnylol
@@ -69,6 +67,7 @@
       proton-vpn-cli
       codex
       antigravity-cli
+      frida-tools
       # (lutris.override {
         # extraLibraries = pkgs: with pkgs; [ vulkan-loader ];
       # })

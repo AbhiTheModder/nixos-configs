@@ -14,7 +14,7 @@ PLACEHOLDER_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
 to_sri() {
   local hash="$1"
-  nix hash to-sri --type sha256 "$hash"
+  nix hash convert --hash-algo sha256 --to sri "$hash"
 }
 
 prefetch_url_sri() {
@@ -24,17 +24,32 @@ prefetch_url_sri() {
   to_sri "$hash"
 }
 
-prefetch_github_sri() {
-  local owner="$1" repo="$2" rev="$3"
-  local hash
-  hash="$(nix-prefetch-url --type sha256 --unpack "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz")"
-  to_sri "$hash"
+# Retry a command a few times to ride out transient network failures.
+retry() {
+  local attempts="$1"; shift
+  local attempt
+  for ((attempt = 1; attempt <= attempts; attempt++)); do
+    if "$@"; then
+      return 0
+    fi
+    if [[ "$attempt" == "$attempts" ]]; then
+      return 1
+    fi
+    sleep 2
+  done
 }
 
-prefetch_github_hash() {
+prefetch_github_sri() {
   local owner="$1" repo="$2" rev="$3"
-  local hash
-  hash="$(nix-prefetch-url --type sha256 --unpack "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz")"
+  local tmp hash
+  tmp="$(mktemp "${TMPDIR:-/tmp}/github-${repo}.XXXXXX.tar.gz")"
+  if ! retry 3 gh api "repos/${owner}/${repo}/tarball/${rev}" > "$tmp"; then
+    rm -f "$tmp"
+    echo "ERROR: failed to download ${owner}/${repo}@${rev} via gh api" >&2
+    return 1
+  fi
+  hash="$(nix-prefetch-url --type sha256 --unpack "file://${tmp}")"
+  rm -f "$tmp"
   to_sri "$hash"
 }
 
@@ -66,7 +81,7 @@ update_crush() {
   echo "=== crush ==="
   local file="$PKGS_DIR/crush.nix"
   local tag
-  tag="$(gh release list --repo charmbracelet/crush --limit 2 --json tagName -q '.[1].tagName')"
+  tag="$(retry 3 gh release list --repo charmbracelet/crush --limit 2 --json tagName -q '.[1].tagName')"
   local version="${tag#v}"
   local hash
   hash="$(prefetch_github_sri charmbracelet crush "$tag")"
@@ -77,7 +92,7 @@ update_crush() {
 
   # Crush may require a specific Go version not in nixpkgs; warn if go.mod changed.
   local go_mod_content crush_go_version
-  go_mod_content="$(gh api "repos/charmbracelet/crush/contents/go.mod?ref=${tag}" --jq '.content' | base64 -d)"
+  go_mod_content="$(retry 3 gh api "repos/charmbracelet/crush/contents/go.mod?ref=${tag}" --jq '.content' | base64 -d)"
   crush_go_version="$(parse_go_mod_version "$go_mod_content")"
   if [[ -n "$crush_go_version" ]]; then
     local current_go_version
@@ -95,9 +110,9 @@ update_bunnylol() {
   echo "=== bunnylol ==="
   local file="$PKGS_DIR/bunnylol.nix"
   local commit
-  commit="$(gh api repos/facebook/bunnylol.rs/commits/main --jq '.sha')"
+  commit="$(retry 3 gh api repos/facebook/bunnylol.rs/commits/main --jq '.sha')"
   local hash
-  hash="$(prefetch_github_hash facebook bunnylol.rs "$commit")"
+  hash="$(prefetch_github_sri facebook bunnylol.rs "$commit")"
 
   replace_string_attr "$file" rev "$commit"
   replace_string_attr "$file" hash "$hash"
@@ -109,9 +124,9 @@ update_wshowkeys() {
   echo "=== wshowkeys ==="
   local file="$PKGS_DIR/wshowkeys.nix"
   local commit
-  commit="$(gh api repos/DreamMaoMao/wshowkeys/commits/main --jq '.sha')"
+  commit="$(retry 3 gh api repos/DreamMaoMao/wshowkeys/commits/main --jq '.sha')"
   local hash
-  hash="$(prefetch_github_hash DreamMaoMao wshowkeys "$commit")"
+  hash="$(prefetch_github_sri DreamMaoMao wshowkeys "$commit")"
 
   replace_string_attr "$file" rev "$commit"
   replace_string_attr "$file" hash "$hash"
@@ -122,10 +137,10 @@ update_kisesi() {
   echo "=== kisesi ==="
   local file="$PKGS_DIR/kisesi.nix"
   local tag
-  tag="$(gh api repos/eeriemyxi/kisesi/tags --jq '.[0].name')"
+  tag="$(retry 3 gh api repos/eeriemyxi/kisesi/tags --jq '.[0].name')"
   local version="${tag#v}"
   local hash
-  hash="$(prefetch_github_hash eeriemyxi kisesi "$tag")"
+  hash="$(prefetch_github_sri eeriemyxi kisesi "$tag")"
 
   replace_string_attr "$file" version "$version"
   replace_string_attr "$file" sha256 "$hash"
@@ -136,10 +151,10 @@ update_mechvibes_lite() {
   echo "=== mechvibes-lite ==="
   local file="$PKGS_DIR/mechvibes-lite.nix"
   local tag
-  tag="$(gh api repos/eeriemyxi/mechvibes-lite/tags --jq '.[0].name')"
+  tag="$(retry 3 gh api repos/eeriemyxi/mechvibes-lite/tags --jq '.[0].name')"
   local version="${tag#v}"
   local hash
-  hash="$(prefetch_github_hash eeriemyxi mechvibes-lite "$tag")"
+  hash="$(prefetch_github_sri eeriemyxi mechvibes-lite "$tag")"
 
   replace_string_attr "$file" version "$version"
   replace_string_attr "$file" sha256 "$hash"
@@ -181,14 +196,14 @@ update_iaito() {
   echo "=== iaito ==="
   local file="$PKGS_DIR/iaito.nix"
   local tag
-  tag="$(gh release list --repo radareorg/iaito --limit 1 --json tagName -q '.[0].tagName')"
+  tag="$(retry 3 gh release list --repo radareorg/iaito --limit 1 --json tagName -q '.[0].tagName')"
   local version="${tag#v}"
   local main_rev
-  main_rev="$(gh api "repos/radareorg/iaito/git/ref/tags/${tag}" --jq '.object.sha')"
+  main_rev="$(retry 3 gh api "repos/radareorg/iaito/git/ref/tags/${tag}" --jq '.object.sha')"
   local trans_default_branch
-  trans_default_branch="$(gh api repos/radareorg/iaito-translations --jq '.default_branch')"
+  trans_default_branch="$(retry 3 gh api repos/radareorg/iaito-translations --jq '.default_branch')"
   local trans_rev
-  trans_rev="$(gh api "repos/radareorg/iaito-translations/commits/${trans_default_branch}" --jq '.sha')"
+  trans_rev="$(retry 3 gh api "repos/radareorg/iaito-translations/commits/${trans_default_branch}" --jq '.sha')"
   local main_hash trans_hash
   main_hash="$(prefetch_github_sri radareorg iaito "$main_rev")"
   trans_hash="$(prefetch_github_sri radareorg iaito-translations "$trans_rev")"
@@ -217,10 +232,10 @@ update_leaf() {
   echo "=== leaf ==="
   local file="$PKGS_DIR/leaf.nix"
   local tag
-  tag="$(gh release list --repo RivoLink/leaf --limit 1 --json tagName -q '.[0].tagName')"
+  tag="$(retry 3 gh release list --repo RivoLink/leaf --limit 1 --json tagName -q '.[0].tagName')"
   local version="${tag}"
   local hash
-  hash="$(prefetch_github_hash RivoLink leaf "$tag")"
+  hash="$(prefetch_github_sri RivoLink leaf "$tag")"
 
   replace_string_attr "$file" version "$version"
   replace_string_attr "$file" hash "$hash"

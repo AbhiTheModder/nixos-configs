@@ -10,7 +10,7 @@
   stdenv,
   symlinkJoin,
   makeWrapper,
-}@args:
+}:
 let
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "iaito-unwrapped";
@@ -20,8 +20,8 @@ let
       (fetchFromGitHub {
         owner = "radareorg";
         repo = "iaito";
-        rev = "61f47fca35a68f76f849be1ef5092e938f831a5b";
-        hash = "sha256-TvYAwBCmYehOLcitlk8/SCqdq5deVQGppxBYWdb3knQ=";
+        rev = "55a401b3dc22e2df0536c84c0ee775f5ea314d93";
+        hash = "sha256-ZtLgV1cDmPinfjgH1yZ7AzCUKGJ2BkX2PuEYp+vWR5I=";
         name = "main";
       })
       (fetchFromGitHub {
