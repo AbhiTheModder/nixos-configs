@@ -4,8 +4,7 @@ let
   system = pkgs.stdenv.hostPlatform.system;
 
   mangoConfig = pkgs.writeText "mango-config.conf" ''
-    monitorrule=name:^HDMI-A-1$,width:3840,height:2160,refresh:60,x:1920,y:0,scale:1.5
-    monitorrule=name:^eDP-1$,width:1920,height:1080,refresh:60,x:0,y:0,scale:1
+    monitorrule=make:LG Electronics,model:LG ULTRAGEAR,serial:406NTYT7U066,width:1920,height:1080,refresh:60
 
     env=QT_AUTO_SCREEN_SCALE_FACTOR,1
     env=GDK_SCALE,1
@@ -48,6 +47,7 @@ let
     windowrule=isfloating:1,isoverlay:1,appid:zen,title:Picture-in-Picture
 
     exec-once=noctalia
+    exec-once=${autoScale}
 
     bind=Super,Return,spawn,wezterm
     bind=Super,b,spawn,zen
@@ -116,6 +116,32 @@ let
   mangoReload = pkgs.writeText "mango-reload.toml" ''
     [hooks]
     wallpaper_changed = "mmsg dispatch reload_config"
+  '';
+
+  # Mango applies scale 1 unless a monitorrule says otherwise, so derive the
+  # scale from each output's native mode: 4K -> 1.5 (logical 2560x1440),
+  # 1440p -> 1.25, everything else stays 1. Runs as an exec-once watcher so
+  # hotplugged monitors get scaled without config edits.
+  autoScale = pkgs.writeShellScript "mango-auto-scale" ''
+    #!/usr/bin/env bash
+    set -u
+    while :; do
+      sleep 2
+      json=$(mmsg get all-monitors 2>/dev/null) || continue
+      [ -n "$json" ] || continue
+      printf '%s' "$json" | ${pkgs.jq}/bin/jq -c '.monitors[]?' | while read -r mon; do
+        name=$(printf '%s' "$mon" | ${pkgs.jq}/bin/jq -r '.name // empty')
+        [ -n "$name" ] || continue
+        scale=$(printf '%s' "$mon" | ${pkgs.jq}/bin/jq -r '.scale // 1')
+        width=$(printf '%s' "$mon" | ${pkgs.jq}/bin/jq -r '.width // 0')
+        target=$(awk -v w="$width" -v s="$scale" \
+          'BEGIN { mw = w * s; sc = 1; if (mw >= 3800) sc = 1.5; else if (mw >= 2500) sc = 1.25; printf "%.2f", sc }')
+        same=$(awk -v a="$scale" -v b="$target" \
+          'BEGIN { print (a+0 >= b-0.01 && a+0 <= b+0.01) ? 1 : 0 }')
+        [ "$same" = 1 ] || wlr-randr --output "$name" --scale "$target" >/dev/null 2>&1 || true
+        sleep 1
+      done
+    done
   '';
 
   noctaliaConfig = pkgs.writeText "noctalia-config.toml" ''
@@ -532,6 +558,7 @@ in
   environment.systemPackages = with pkgs; [
     inputs.noctalia.packages.${system}.default
 
+    wlr-randr
     gnome-disk-utility
   ];
 

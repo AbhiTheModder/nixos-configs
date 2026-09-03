@@ -2,16 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "leaf";
-  version = "1.28.0";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "RivoLink";
     repo = "leaf";
     rev = version;
-    hash = "sha256-eCSGZ+fBc1fxVBQdZgpZYkop2mO1mVPDylXIVK/C2JE=";
+    hash = "sha256-xAO52Xhu2QOXzg/TJubTguJ7URddKnQekACnvytx5Qw=";
   };
 
-  cargoHash = "sha256-B0hYSG00C3my2TcGE+rfziTW9r3HZH+8MAHFQq6uiIk=";
+  patches = [ ./../patches/leaf-avoid-cursor-query-on-clear.patch ];
+
+  cargoHash = "sha256-Y+sOyHOSEjKW+NEpSjZgqJwXH3IOSFMBGM84oytRNsc=";
 
   meta = {
     description = "A friendly terminal Markdown previewer";

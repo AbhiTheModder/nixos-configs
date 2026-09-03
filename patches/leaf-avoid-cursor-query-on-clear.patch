@@ -1,0 +1,19 @@
+diff --git a/src/main.rs b/src/main.rs
+index 3d4a4aa..e290a2b 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1,5 +1,5 @@
+ use anyhow::{bail, Context, Result};
+-use ratatui::{backend::CrosstermBackend, Terminal};
++use ratatui::{backend::{Backend, CrosstermBackend, ClearType}, Terminal};
+ use std::{
+     fs::OpenOptions,
+     io::{self, IsTerminal, Read, Write},
+@@ -535,7 +535,7 @@ fn main() -> Result<()> {
+     let mut terminal = Terminal::new(CrosstermBackend::new(stdout))?;
+     runtime::debug_log(debug_input, "terminal new done");
+-    terminal.clear()?;
++    terminal.backend_mut().clear_region(ClearType::All)?;
+     runtime::debug_log(debug_input, "terminal clear done");
+     let initial_draw_result = (|| -> Result<()> {
+         let area = terminal.size()?;
