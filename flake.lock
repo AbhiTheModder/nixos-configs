@@ -153,11 +153,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1787170908,
-        "narHash": "sha256-MscTAE921ymn0qyL3YQ06P3+AGg23c//6rh7+c+Iv4Y=",
+        "lastModified": 1788247842,
+        "narHash": "sha256-fpb2Jds7FHSKMiPRBsV0DwDjy4trQ6RlKWhiSITsBr4=",
         "owner": "HalFrgrd",
         "repo": "flyline",
-        "rev": "b6d44125fa764c2fee93fd73e9fe379b9446b7be",
+        "rev": "3a6d95cb79c9905b33dc2b1a003d209f5a11728c",
         "type": "github"
       },
       "original": {

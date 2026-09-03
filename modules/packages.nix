@@ -28,6 +28,7 @@
       nixd
       nixfmt-rfc-style
       croc
+      bubblewrap
       kdePackages.kdenlive
       wshowkeys
       axel

@@ -39,6 +39,19 @@
       # Flyline's documented Bash-command action.
       flyline key bind Ctrl+r 'always=runBashCommand(__atuin_widget_run)+submitOrNewline'
       flyline key bind Up 'editingBufferMode+cursorOnFirstLine=runBashCommand("__atuin_history --shell-up-key-binding --keymap-mode=emacs")'
+
+      # Flyline agent mode: type ": <plain english>" and press Enter (or Alt+Enter
+      # on any buffer) to have agy (antigravity) convert it into a Bash command.
+      flyline set-agent-mode \
+        --system-prompt "Be concise. Answer with a JSON array of at most 3 items with objects containing: command and description. Command will be a Bash command. " \
+        --trigger-prefix ': ' \
+        --command 'agy --effort low --prompt'
+
+      # Shift+Tab forces the flycomp completion-synthesis prompt; keep Tab free.
+      # Render settings are session-only for flyline, so re-apply each shell.
+      flyline --set-frame-rate 60
+      flyline set-cursor --backend terminal
+      flyline suggestions flycomp --timeout-ms 10000
     '';
     promptInit = ''
       : "$PROMPT_COMMAND:="
