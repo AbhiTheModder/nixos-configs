@@ -5,11 +5,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1787552820,
-        "narHash": "sha256-ygJvk5jDAoZbiLIjrBaJfBDfC2PKIorZxpPijVmQPzg=",
+        "lastModified": 1788457722,
+        "narHash": "sha256-J2ViOqAjXsQKxtDS9ZEAf4GcvnBTqrrXV9JHAYEIZVw=",
         "owner": "fagramdesktop",
         "repo": "fadesktop",
-        "rev": "666deb653f1dcc056d053b366f320243244ee89c",
+        "rev": "430fc5cfb47d7868bc2e88450f984e4876ec14ce",
         "type": "github"
       },
       "original": {

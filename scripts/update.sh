@@ -228,6 +228,46 @@ update_iaito() {
   echo "Updated iaito to $version (main=$main_rev, translations=$trans_rev)."
 }
 
+# Latest commit SHA on a repo's default branch (branch name is queried,
+# since it is not always "main").
+github_head_commit() {
+  local owner="$1" repo="$2"
+  local branch
+  branch="$(retry 3 gh api "repos/${owner}/${repo}" --jq '.default_branch')"
+  retry 3 gh api "repos/${owner}/${repo}/commits/${branch}" --jq '.sha'
+}
+
+# Update rev and hash of the fetchFromGitHub block containing `repo = "<repo>";`.
+update_github_rev_hash() {
+  local file="$1" repo="$2" rev="$3" hash="$4"
+  local anchor
+  anchor="$(grep -Fn "repo = \"${repo}\";" "$file" | head -1 | cut -d: -f1)"
+  if [[ -z "$anchor" ]]; then
+    echo "ERROR: could not find repo '$repo' in $file" >&2
+    return 1
+  fi
+  sed -i "${anchor},/^  };/{s|rev = \"[^\"]*\";|rev = \"$rev\";|; s|hash = \"[^\"]*\";|hash = \"$hash\";|}" "$file"
+}
+
+update_yazi_plugins() {
+  echo "=== yazi-plugins ==="
+  local file="$PKGS_DIR/default.nix"
+  local yazi_rev ouch_rev gvfs_rev
+  yazi_rev="$(github_head_commit yazi-rs plugins)"
+  ouch_rev="$(github_head_commit ndtoan96 ouch.yazi)"
+  gvfs_rev="$(github_head_commit boydaihungst gvfs.yazi)"
+  local yazi_hash ouch_hash gvfs_hash
+  yazi_hash="$(prefetch_github_sri yazi-rs plugins "$yazi_rev")"
+  ouch_hash="$(prefetch_github_sri ndtoan96 ouch.yazi "$ouch_rev")"
+  gvfs_hash="$(prefetch_github_sri boydaihungst gvfs.yazi "$gvfs_rev")"
+
+  update_github_rev_hash "$file" "plugins" "$yazi_rev" "$yazi_hash"
+  update_github_rev_hash "$file" "ouch.yazi" "$ouch_rev" "$ouch_hash"
+  update_github_rev_hash "$file" "gvfs.yazi" "$gvfs_rev" "$gvfs_hash"
+  echo "Updated yazi-plugins to $yazi_rev, ouch.yazi to $ouch_rev, gvfs.yazi to $gvfs_rev."
+  echo "Tip: run 'nix flake update yazi' to keep the yazi binary in lockstep with these plugins."
+}
+
 update_leaf() {
   echo "=== leaf ==="
   local file="$PKGS_DIR/leaf.nix"
@@ -253,6 +293,7 @@ main() {
     update_claude_code
     update_iaito
     update_leaf
+    update_yazi_plugins
   else
     for pkg in "$@"; do
       case "$pkg" in
@@ -265,6 +306,7 @@ main() {
         go) update_go ;;
         iaito) update_iaito ;;
         leaf) update_leaf ;;
+        yazi-plugins) update_yazi_plugins ;;
         *) echo "Unknown package: $pkg" >&2; exit 1 ;;
       esac
     done

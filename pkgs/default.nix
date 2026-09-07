@@ -25,22 +25,22 @@ let
   yazi-plugins = pkgs.fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "39aaf6dc77e546fe7f7836f102a6c57f96d15365";
-    hash = "sha256-rl8EA8aymVQU1296IVsEZ2WR9xBxQTYBK+VUCic/K3k=";
+    rev = "4dc7f1b6458c2578f4494f10d468c68c1082214f";
+    hash = "sha256-BSAOkL4H4LVMbTRFv4kzGGRpLgtKkfNTEsDH2EQ219Q=";
   };
 
   ouch-plugin = pkgs.fetchFromGitHub {
     owner = "ndtoan96";
     repo = "ouch.yazi";
-    rev = "406ce6c13ec3a18d4872b8f64b62f4a530759b2c";
-    hash = "sha256-UHneVJ+YXyDuPrZS+PZbs9n9h+VN5M2QG36FdprBkJc=";
+    rev = "cfe4f507ef7337c8ad4c90eef68ea91fc6694759";
+    hash = "sha256-t1kUo4+YODeTG9d5Yq/vxElcmRHIebC5TRv+uDGG88c=";
   };
 
   gvfs-plugin = pkgs.fetchFromGitHub {
     owner = "boydaihungst";
     repo = "gvfs.yazi";
-    rev = "3abc0a258f9d7aeaa453a2d0d6e103c5a305953d";
-    hash = "sha256-UHneVJ+YXyDuPrZS+PZbs9n9h+VN5M2QG36FdprBkJc=";
+    rev = "a85d65961b0ce99b472dd6e83b99062be178450b";
+    hash = "sha256-NCFdSNqSqrcbFsp8osnDhbzY2p2CyF5hzxQ1qG3TXwc=";
   };
 
   yazi = prev.yazi.override {
@@ -84,10 +84,10 @@ let
         };
         plugin = {
           prepend_fetchers = [
-            { id = "git"; url = "*"; run = "git"; group = "git"; }
-            { id = "git"; url = "*/"; run = "git"; group = "git"; }
-            { id = "mime"; url = "local://*"; run = "mime-ext.local"; prio = "high"; group = "mime"; }
-            { id = "mime"; url = "remote://*"; run = "mime-ext.remote"; prio = "high"; group = "mime"; }
+            { url = "*"; run = "git"; group = "git"; }
+            { url = "*/"; run = "git"; group = "git"; }
+            { url = "local://*"; run = "mime-ext.local"; prio = "high"; group = "mime"; }
+            { url = "remote://*"; run = "mime-ext.remote"; prio = "high"; group = "mime"; }
           ];
           prepend_previewers = [
             { mime = "application/{*zip,tar,bzip2,7z*,rar,xz,zstd,java-archive}"; run = "ouch"; }
