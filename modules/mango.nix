@@ -93,8 +93,8 @@ let
     bind=NONE,XF86AudioLowerVolume,spawn,noctalia msg volume-down
     bind=NONE,XF86AudioMute,spawn,noctalia msg volume-mute
     bind=NONE,XF86AudioMicMute,spawn,noctalia msg mic-mute
-    bind=NONE,XF86MonBrightnessUp,spawn_shell,noctalia msg brightness-up eDP-1; ddcutil --bus 3 setvcp 10 + 20
-    bind=NONE,XF86MonBrightnessDown,spawn_shell,noctalia msg brightness-down eDP-1; ddcutil --bus 3 setvcp 10 - 20
+    bind=NONE,XF86MonBrightnessUp,spawn,noctalia msg brightness-up
+    bind=NONE,XF86MonBrightnessDown,spawn,noctalia msg brightness-down
     bind=NONE,Print,spawn,noctalia msg screenshot-region
     bind=SHIFT,Print,spawn,noctalia msg screenshot-fullscreen
 
@@ -188,6 +188,13 @@ let
     enable_sounds = true
     sound_volume = 0.5
     sound_theme = "freedesktop"
+
+    [brightness]
+    enable_ddcutil = true
+    sync_all_monitors = true
+
+    [brightness.monitor.eDP-1]
+    backend = "backlight"
 
     [bar.default]
     auto_hide = true
