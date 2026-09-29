@@ -1,5 +1,20 @@
 { pkgs, pkgsUnstable, inputs, ... }:
 
+let
+  # Provides `node` backed by `bun`, so tools hardcoding
+  # `#!/usr/bin/env node` or spawning `node` work without nodejs.
+  # A plain `ln -s bun node` can't handle `node --version` / `-v`
+  # (bun's node-wrapper has no REPL/version flag), so this wrapper
+  # answers version probes with bun's node compat version and
+  # passes everything else through to bun.
+  # Remove this if you add `nodejs` to systemPackages (bin/node collision).
+  bun-as-node = pkgs.writeShellScriptBin "node" ''
+    if [[ "''${1:-}" == "--version" || "''${1:-}" == "-v" ]]; then
+      exec ${pkgs.bun}/bin/bun -e 'console.log(process.version)'
+    fi
+    exec ${pkgs.bun}/bin/bun "$@"
+  '';
+in
 {
   environment.systemPackages =
     with pkgs;
@@ -19,6 +34,7 @@
       fixPythonPkg
       eza
       bun
+      bun-as-node
       vlc
       helix
       wl-clipboard

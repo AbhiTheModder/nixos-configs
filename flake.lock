@@ -267,11 +267,11 @@
         "scenefx": "scenefx"
       },
       "locked": {
-        "lastModified": 1787704578,
-        "narHash": "sha256-Xypw40lSPc3yYqw7OdiNe+XNy1ZgnCXI4h5HJeJiWK0=",
+        "lastModified": 1790577855,
+        "narHash": "sha256-aDjYwXuX+TKZya7UCNgv+O/chCYIbATHpAOKl9xaNdk=",
         "owner": "mangowm",
         "repo": "mango",
-        "rev": "200d88bf5ee27774ea1095b6895c93d70ac5a579",
+        "rev": "c08ca4772d9eb4e0c95035e6012025fca69c6d81",
         "type": "github"
       },
       "original": {
@@ -373,11 +373,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1787360063,
-        "narHash": "sha256-95aJfHyQTLWslCXFVNB0odgmVkpdmDezQwTg9mhqV1E=",
-        "rev": "2c423e03bbafcff28bfadc6781a4a8257f205cb5",
+        "lastModified": 1790323409,
+        "narHash": "sha256-m4DGo58Fza5ImOegtWOeE18nhpSO1IGzsVA6Lpsb4zw=",
+        "rev": "e94cb152ed51bd6e24eb4a41f1460252beb52cd2",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1059570.2c423e03bbaf/nixexprs.tar.zst"
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1079315.e94cb152ed51/nixexprs.tar.zst"
       },
       "original": {
         "type": "tarball",
@@ -385,6 +385,22 @@
       }
     },
     "nixpkgs_6": {
+      "locked": {
+        "lastModified": 1789921291,
+        "narHash": "sha256-Ft/BRnIqw1MywFoXydKobjjWmDFgDdYtSpJliE8+yUw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "44a91898084f46797b5fac650c7e8c9ac38c43d4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_7": {
       "locked": {
         "lastModified": 1772198003,
         "narHash": "sha256-I45esRSssFtJ8p/gLHUZ1OUaaTaVLluNkABkk6arQwE=",
@@ -407,11 +423,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787742524,
-        "narHash": "sha256-oF+EMt+AUyVeNh7yQ75BishmxezgNMUcmxRc9foRJPI=",
+        "lastModified": 1790649611,
+        "narHash": "sha256-9o6CDjNhdU7SlzZwuw1Cftwv77Lik7PUj/ADTqKZ2j8=",
         "owner": "noctalia-dev",
         "repo": "noctalia",
-        "rev": "b0958cf2885ca63bf46b62fbea8f582ffd3bb9e2",
+        "rev": "9287a782f3422aa8868f71498d8b70f1644a52f2",
         "type": "github"
       },
       "original": {
@@ -425,11 +441,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1787482410,
-        "narHash": "sha256-R32LF+S4NnmJwSnzt5xKjb15RjYemb/ZZRnDnP5lxfs=",
+        "lastModified": 1790518002,
+        "narHash": "sha256-agpHRmhsUL4ZNFseCNilGSiC/cc0S2tC1ZvC5rXmgtY=",
         "owner": "noctalia-dev",
         "repo": "noctalia-greeter",
-        "rev": "5956c6f40249b2837bb260d25ea3953a2631fbdc",
+        "rev": "44337ecba043749c29de6f3d563315b91987a908",
         "type": "github"
       },
       "original": {
@@ -466,6 +482,7 @@
         "noctalia": "noctalia",
         "noctalia-greeter": "noctalia-greeter",
         "radare2": "radare2",
+        "terminal-browser": "terminal-browser",
         "wezterm": "wezterm",
         "xytz": "xytz",
         "yazi": "yazi",
@@ -633,6 +650,25 @@
         "type": "github"
       }
     },
+    "terminal-browser": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_6"
+      },
+      "locked": {
+        "lastModified": 1790019338,
+        "narHash": "sha256-ZTCjzhXdWLPc6V3C1pl404LL1DKRVFa3TNiiwp3LwRs=",
+        "owner": "AbhiTheModder",
+        "repo": "terminal-browser",
+        "rev": "49100118ce314ba4259230e8727c4a5d69efddc3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AbhiTheModder",
+        "ref": "nix",
+        "repo": "terminal-browser",
+        "type": "github"
+      }
+    },
     "wezterm": {
       "inputs": {
         "flake-utils": "flake-utils_3",
@@ -664,7 +700,7 @@
     "xytz": {
       "inputs": {
         "flake-utils": "flake-utils_4",
-        "nixpkgs": "nixpkgs_6"
+        "nixpkgs": "nixpkgs_7"
       },
       "locked": {
         "lastModified": 1787610648,

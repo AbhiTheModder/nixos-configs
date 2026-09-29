@@ -5,6 +5,8 @@
 
   programs.flyline.enable = true;
 
+  programs.terminal-browser.enable = true;
+
   programs.xonsh = {
     enable = true;
     extraPackages = ps: with ps; [ pip ];

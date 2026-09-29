@@ -57,6 +57,7 @@ let
     bind=Super,R,setkeymode,resize
     bind=Alt,Tab,focusstack,next
     bind=Shift+Alt,Tab,focusstack,prev
+    # bind=SUPER,Tab,spawn,noctalia msg window-switcher
     bind=Alt+Shift,Left,exchange_client,left
     bind=Alt+Shift,Right,exchange_client,right
     bind=Alt+Shift,Up,exchange_client,up
@@ -149,6 +150,7 @@ let
     font_family = "Maple Mono NF CN"
     show_location = false
     polkit_agent = true
+    settings_expand_all_groups = true
 
     [shell.greeter_sync]
     auto_sync = true
@@ -158,8 +160,34 @@ let
     borders = false
     shadow = false
 
+    [shell.window_switcher]
+    style = "carousel"
+    mru = false
+    show_caption = true
+    show_count = true
+    show_app_icon = true
+    show_all_outputs = true
+    current_workspace_only = false
+
+    [shell.launcher.providers.panels]
+    prefix = "pan"
+
     [shell.screenshot]
     directory = "/home/abhi/Pictures/Screenshots"
+    annotate = true
+    skip_annotate_on_copy_save = true
+    close_on_copy = true
+    close_on_save = true
+
+    [lockscreen]
+    transition = ["fade", "wipe", "disc", "stripes", "zoom", "honeycomb"]
+    transition_duration = 1500
+    edge_smoothness = 0.3
+
+    [audio]
+    enable_sounds = true
+    sound_volume = 0.5
+    sound_theme = "freedesktop"
 
     [bar.default]
     auto_hide = true
@@ -167,8 +195,20 @@ let
     shadow = false
     contact_shadow = false
 
+    [widget.brightness]
+    show_when_unavailable = true
+
+    [widget.workspaces]
+    show_tooltip = true
+
     [calendar]
     enabled = true
+
+    [calendar.reminders]
+    enabled = true
+    use_event_reminders = true
+    default_lead_minutes = 10
+    all_day_digest_time = "09:00"
 
     [calendar.account.work_google]
     type = "google"
