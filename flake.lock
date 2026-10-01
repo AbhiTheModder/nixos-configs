@@ -456,11 +456,11 @@
     },
     "radare2": {
       "locked": {
-        "lastModified": 1787741527,
-        "narHash": "sha256-+O01C9LOkhwJPQyBE5xOvh3N8pJK5On+3crxfBpINuU=",
+        "lastModified": 1790848714,
+        "narHash": "sha256-bNVrW8IKBVIdArrC4n2PSHXFLKE7Jk6CFf+z1QaAUP4=",
         "owner": "radareorg",
         "repo": "radare2",
-        "rev": "1661c39eed9473bb9d3c925b77589f3d63525016",
+        "rev": "f16a91483f7df13e2e2a92a19dda40c64779dc15",
         "type": "github"
       },
       "original": {
