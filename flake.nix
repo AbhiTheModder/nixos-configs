@@ -42,6 +42,11 @@
     };
     fagram.url = "github:fagramdesktop/fadesktop";
     noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
+
+    localNixosConfig = {
+      url = "path:/home/abhi/.config/nixos";
+      flake = false;
+    };
   };
 
   outputs =
@@ -60,6 +65,7 @@
       ...
     }:
     let
+      primaryUser = "abhi";
       lib = nixpkgs.lib;
       system = "x86_64-linux";
     in
@@ -67,7 +73,7 @@
       nixosConfigurations.btw = lib.nixosSystem {
 
         specialArgs = {
-          inherit inputs;
+          inherit inputs primaryUser;
           pkgsUnstable = import nixpkgs-unstable {
             inherit system;
             config.allowUnfree = true;

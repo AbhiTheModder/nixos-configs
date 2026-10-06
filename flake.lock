@@ -240,6 +240,19 @@
         "type": "github"
       }
     },
+    "localNixosConfig": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791311556,
+        "narHash": "sha256-5qM/2MggyPq1Yo+YbqEnaJmDvEs5LETfaUZ430jaRFE=",
+        "path": "/home/abhi/.config/nixos",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/abhi/.config/nixos",
+        "type": "path"
+      }
+    },
     "mangowm": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -442,6 +455,7 @@
         "flyline": "flyline",
         "helix": "helix",
         "ida-pro-overlay": "ida-pro-overlay",
+        "localNixosConfig": "localNixosConfig",
         "mangowm": "mangowm",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-unstable": "nixpkgs-unstable",

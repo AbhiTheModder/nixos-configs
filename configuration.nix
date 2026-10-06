@@ -77,7 +77,7 @@ in
     (import ./pkgs { inherit inputs system; })
     (final: prev: {
       ida-pro = (prev.callPackage "${inputs.ida-pro-overlay}/packages/ida-pro.nix" {
-        hexPatches = import "${config.users.users.${primaryUser}.home}/.config/nixos/ida-pro-hexpatches.nix";
+        hexPatches = import "${inputs.localNixosConfig}/ida-pro-hexpatches.nix";
       }).overrideAttrs (old: {
         version = "9.5";
         src = prev.requireFile {

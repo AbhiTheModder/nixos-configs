@@ -1,11 +1,6 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, primaryUser, ... }:
 
-let
-  primaryUser = "abhi";
-in
 {
-  _module.args.primaryUser = primaryUser;
-
   users.groups.ideapad_laptop = {};
 
   users.users.${primaryUser} = {
