@@ -40,7 +40,6 @@
       url = "github:helix-editor/helix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    xytz.url = "github:xdagiz/xytz";
     fagram.url = "github:fagramdesktop/fadesktop";
     noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
   };

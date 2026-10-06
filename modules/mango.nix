@@ -1,6 +1,7 @@
-{ pkgs, inputs, ... }:
+{ config, pkgs, inputs, primaryUser, ... }:
 
 let
+  home = config.users.users.${primaryUser}.home;
   system = pkgs.stdenv.hostPlatform.system;
 
   mangoConfig = pkgs.writeText "mango-config.conf" ''
@@ -173,7 +174,7 @@ let
     prefix = "pan"
 
     [shell.screenshot]
-    directory = "/home/abhi/Pictures/Screenshots"
+    directory = "${home}/Pictures/Screenshots"
     annotate = true
     skip_annotate_on_copy_save = true
     close_on_copy = true
@@ -245,7 +246,7 @@ let
     wallpaper_scheme = "m3-tonal-spot"
 
     [wallpaper]
-    directory = "/home/abhi/Pictures/walls"
+    directory = "${home}/Pictures/walls"
   '';
 
   utcClockPluginToml = pkgs.writeText "utc-clock-plugin.toml" ''
@@ -623,19 +624,19 @@ in
     "z /sys/bus/platform/drivers/ideapad_acpi/*/touchpad 0664 root ideapad_laptop"
     "z /sys/bus/platform/drivers/ideapad_acpi/*/camera_power 0664 root ideapad_laptop"
     "z /sys/bus/platform/drivers/ideapad_acpi/*/usb_charging 0664 root ideapad_laptop"
-    "d /home/abhi/.config/noctalia 0755 abhi users -"
-    "d /home/abhi/.config/mango 0755 abhi users -"
-    "d /home/abhi/.local/share/noctalia/plugins/utc-clock/translations 0755 abhi users -"
-    "d /home/abhi/.local/share/noctalia/plugins/ideapad-controls/translations 0755 abhi users -"
-    "L+ /home/abhi/.config/noctalia/config.toml - - - - ${noctaliaConfig}"
-    "L+ /home/abhi/.config/noctalia/mango-reload.toml - - - - ${mangoReload}"
-    "L+ /home/abhi/.local/share/noctalia/plugins/utc-clock/plugin.toml - - - - ${utcClockPluginToml}"
-    "L+ /home/abhi/.local/share/noctalia/plugins/utc-clock/clock.luau - - - - ${utcClockLuau}"
-    "L+ /home/abhi/.local/share/noctalia/plugins/utc-clock/translations/en.json - - - - ${utcClockEnJson}"
-    "L+ /home/abhi/.local/share/noctalia/plugins/ideapad-controls/plugin.toml - - - - ${ideapadPluginToml}"
-    "L+ /home/abhi/.local/share/noctalia/plugins/ideapad-controls/widget.luau - - - - ${ideapadWidgetLuau}"
-    "L+ /home/abhi/.local/share/noctalia/plugins/ideapad-controls/panel.luau - - - - ${ideapadPanelLuau}"
-    "L+ /home/abhi/.local/share/noctalia/plugins/ideapad-controls/translations/en.json - - - - ${ideapadEnJson}"
-    "L+ /home/abhi/.config/mango/config.conf - - - - ${mangoConfig}"
+    "d ${home}/.config/noctalia 0755 ${primaryUser} users -"
+    "d ${home}/.config/mango 0755 ${primaryUser} users -"
+    "d ${home}/.local/share/noctalia/plugins/utc-clock/translations 0755 ${primaryUser} users -"
+    "d ${home}/.local/share/noctalia/plugins/ideapad-controls/translations 0755 ${primaryUser} users -"
+    "L+ ${home}/.config/noctalia/config.toml - - - - ${noctaliaConfig}"
+    "L+ ${home}/.config/noctalia/mango-reload.toml - - - - ${mangoReload}"
+    "L+ ${home}/.local/share/noctalia/plugins/utc-clock/plugin.toml - - - - ${utcClockPluginToml}"
+    "L+ ${home}/.local/share/noctalia/plugins/utc-clock/clock.luau - - - - ${utcClockLuau}"
+    "L+ ${home}/.local/share/noctalia/plugins/utc-clock/translations/en.json - - - - ${utcClockEnJson}"
+    "L+ ${home}/.local/share/noctalia/plugins/ideapad-controls/plugin.toml - - - - ${ideapadPluginToml}"
+    "L+ ${home}/.local/share/noctalia/plugins/ideapad-controls/widget.luau - - - - ${ideapadWidgetLuau}"
+    "L+ ${home}/.local/share/noctalia/plugins/ideapad-controls/panel.luau - - - - ${ideapadPanelLuau}"
+    "L+ ${home}/.local/share/noctalia/plugins/ideapad-controls/translations/en.json - - - - ${ideapadEnJson}"
+    "L+ ${home}/.config/mango/config.conf - - - - ${mangoConfig}"
   ];
 }

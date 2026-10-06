@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{ config, pkgs, primaryUser, ... }:
+
+let
+  home = config.users.users.${primaryUser}.home;
+in
 
 {
   xdg.portal = {
@@ -26,8 +30,8 @@
   '';
 
   system.activationScripts.termfilechooser-config.text = ''
-    mkdir -p /home/abhi/.config/xdg-desktop-portal-termfilechooser
-    cp /etc/xdg-desktop-portal-termfilechooser/config /home/abhi/.config/xdg-desktop-portal-termfilechooser/config
-    chown abhi:users /home/abhi/.config/xdg-desktop-portal-termfilechooser/config
+    mkdir -p ${home}/.config/xdg-desktop-portal-termfilechooser
+    cp /etc/xdg-desktop-portal-termfilechooser/config ${home}/.config/xdg-desktop-portal-termfilechooser/config
+    chown ${primaryUser}:users ${home}/.config/xdg-desktop-portal-termfilechooser/config
   '';
 }

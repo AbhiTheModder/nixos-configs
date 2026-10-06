@@ -2,6 +2,7 @@
   config,
   pkgs,
   inputs,
+  primaryUser,
   ...
 }:
 
@@ -74,6 +75,18 @@ in
     inputs.yazi.overlays.default
     inputs.helix.overlays.default
     (import ./pkgs { inherit inputs system; })
+    (final: prev: {
+      ida-pro = (prev.callPackage "${inputs.ida-pro-overlay}/packages/ida-pro.nix" {
+        hexPatches = import "${config.users.users.${primaryUser}.home}/.config/nixos/ida-pro-hexpatches.nix";
+      }).overrideAttrs (old: {
+        version = "9.5";
+        src = prev.requireFile {
+          name = "ida-pro_95_x64linux.run";
+          url = "https://my.hex-rays.com/";
+          sha256 = "04a8j2g6jqhzda5yigz7ik67hll3iyrhqylkjn6vi46j9z4kfhrw";
+        };
+      });
+    })
   ];
 
   system.stateVersion = "25.05";

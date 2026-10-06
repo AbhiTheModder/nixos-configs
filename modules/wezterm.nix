@@ -1,6 +1,7 @@
-{ pkgs, inputs, ... }:
+{ config, pkgs, inputs, primaryUser, ... }:
 
 let
+  home = config.users.users.${primaryUser}.home;
   system = pkgs.stdenv.hostPlatform.system;
   wezterm = inputs.wezterm.packages.${system}.default;
 in
@@ -14,9 +15,9 @@ in
   '';
 
   system.activationScripts.wezterm-config.text = ''
-    install -d -m 0755 -o abhi -g users /home/abhi/.config/wezterm
-    install -m 0644 -o abhi -g users \
+    install -d -m 0755 -o ${primaryUser} -g users ${home}/.config/wezterm
+    install -m 0644 -o ${primaryUser} -g users \
       /etc/wezterm/wezterm.lua \
-      /home/abhi/.config/wezterm/wezterm.lua
+      ${home}/.config/wezterm/wezterm.lua
   '';
 }

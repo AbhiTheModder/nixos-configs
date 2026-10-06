@@ -1,11 +1,15 @@
-{ ... }:
+{ config, primaryUser, ... }:
+
+let
+  home = config.users.users.${primaryUser}.home;
+in
 
 {
   environment.sessionVariables = rec {
     ANDROID_HOME = "$HOME/Android/Sdk";
     NIXOS_OZONE_WL = "1";
     PODMAN_COMPOSE_WARNING_LOGS = "false";
-    WASMER_DIR = "/home/abhi/.wasmer";
+    WASMER_DIR = "${home}/.wasmer";
     WASMER_CACHE_DIR = "$WASMER_DIR/cache";
     PATH = [
       "$HOME/Android/flutter/bin"

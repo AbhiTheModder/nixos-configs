@@ -1,10 +1,16 @@
 { pkgs, inputs, ... }:
 
+let
+  primaryUser = "abhi";
+in
 {
+  _module.args.primaryUser = primaryUser;
+
   users.groups.ideapad_laptop = {};
 
-  users.users.abhi = {
+  users.users.${primaryUser} = {
     isNormalUser = true;
+    home = "/home/${primaryUser}";
     description = "Abhi";
     extraGroups = [
       "networkmanager"
