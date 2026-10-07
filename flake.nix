@@ -40,7 +40,7 @@
       url = "github:helix-editor/helix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    fagram.url = "github:fagramdesktop/fadesktop";
+    fagram.url = "github:fagramdesktop/nix";
     noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
 
     localNixosConfig = {

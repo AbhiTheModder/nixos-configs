@@ -5,16 +5,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1788457722,
-        "narHash": "sha256-J2ViOqAjXsQKxtDS9ZEAf4GcvnBTqrrXV9JHAYEIZVw=",
+        "lastModified": 1789738989,
+        "narHash": "sha256-wGCJxucHVdA4zwL8WFsB0NwdW7ukKYDiKNj7x+DkVaU=",
         "owner": "fagramdesktop",
-        "repo": "fadesktop",
-        "rev": "430fc5cfb47d7868bc2e88450f984e4876ec14ce",
+        "repo": "nix",
+        "rev": "d54df8d70377ce24129dd56da168fe2526f14340",
         "type": "github"
       },
       "original": {
         "owner": "fagramdesktop",
-        "repo": "fadesktop",
+        "repo": "nix",
         "type": "github"
       }
     },
@@ -277,11 +277,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1783522502,
-        "narHash": "sha256-iffAls3iaNTyJC2faYcUXSI+Gp02cDjYl+MygxKl2GI=",
+        "lastModified": 1789546076,
+        "narHash": "sha256-zVxLZiSnmaaPLwnhj7pwmqe3axBg/C6nG5JZsJMh2g4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "0bb7ec54c8483066ec9d7720e780a5caa71f8612",
+        "rev": "b1b875982b17dabde9b4a37f3e229e74913e6db3",
         "type": "github"
       },
       "original": {
