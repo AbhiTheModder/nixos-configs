@@ -40,6 +40,10 @@
       url = "github:helix-editor/helix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ekphos = {
+      url = "github:nostacks/ekphos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     fagram.url = "github:fagramdesktop/nix";
     noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
 
@@ -62,6 +66,7 @@
       yazi,
       wezterm,
       helix,
+      ekphos,
       ...
     }:
     let

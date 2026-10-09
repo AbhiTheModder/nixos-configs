@@ -268,21 +268,6 @@ update_yazi_plugins() {
   echo "Tip: run 'nix flake update yazi' to keep the yazi binary in lockstep with these plugins."
 }
 
-update_leaf() {
-  echo "=== leaf ==="
-  local file="$PKGS_DIR/leaf.nix"
-  local tag
-  tag="$(retry 3 gh release list --repo RivoLink/leaf --limit 1 --json tagName -q '.[0].tagName')"
-  local version="${tag}"
-  local hash
-  hash="$(prefetch_github_sri RivoLink leaf "$tag")"
-
-  replace_string_attr "$file" version "$version"
-  replace_string_attr "$file" hash "$hash"
-  replace_string_attr "$file" cargoHash "$PLACEHOLDER_HASH"
-  echo "Updated leaf to $version. Build to get the new cargoHash."
-}
-
 main() {
   if [[ $# -eq 0 ]]; then
     update_crush
@@ -292,7 +277,6 @@ main() {
     update_mechvibes_lite
     update_claude_code
     update_iaito
-    update_leaf
     update_yazi_plugins
   else
     for pkg in "$@"; do
@@ -305,7 +289,6 @@ main() {
         claude-code) update_claude_code ;;
         go) update_go ;;
         iaito) update_iaito ;;
-        leaf) update_leaf ;;
         yazi-plugins) update_yazi_plugins ;;
         *) echo "Unknown package: $pkg" >&2; exit 1 ;;
       esac

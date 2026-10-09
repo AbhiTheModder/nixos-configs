@@ -53,6 +53,7 @@ in
       burpsuite
       imhex
       ida-pro
+      xp-pen-deco-01-v2-driver
       apple-cursor
       kdePackages.ark
       handbrake
@@ -65,8 +66,7 @@ in
       crush
       yazi
       claude-code
-      nb
-      leaf
+      inputs.ekphos.packages.${pkgs.stdenv.hostPlatform.system}.default
       archivemount
       ripdrag
       ouch

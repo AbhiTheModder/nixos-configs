@@ -20,7 +20,6 @@ let
     "${pkgs.path}/pkgs/build-support/go/module.nix"
   ) { go = go_1_26_7; };
   crush = pkgs.callPackage ./crush.nix { buildGo126Module = buildGo126_4Module; };
-  leaf = pkgs.callPackage ./leaf.nix { };
 
   yazi-plugins = pkgs.fetchFromGitHub {
     owner = "yazi-rs";
@@ -130,6 +129,5 @@ in
   bunnylol = bunnylol;
   wshowkeys = wshowkeys;
   crush = crush;
-  leaf = leaf;
   yazi = yazi;
 }
