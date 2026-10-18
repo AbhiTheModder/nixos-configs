@@ -2,6 +2,9 @@
 
 let
   home = config.users.users.${primaryUser}.home;
+
+  useWireguard = false;
+  useOpenvpn = true;
 in
 
 {
@@ -9,7 +12,7 @@ in
   networking.wireless.enable = lib.mkForce false;
 
   networking.networkmanager.enable = true;
-  networking.networkmanager.unmanaged = [ "interface-name:wg0" ];
+  networking.networkmanager.unmanaged = lib.optionals useWireguard [ "interface-name:wg0" ];
   networking.networkmanager.wifi = {
     powersave = false;
     backend = "iwd";
@@ -17,8 +20,19 @@ in
   };
   networking.resolvconf.enable = true;
 
-  networking.wg-quick.interfaces.wg0.configFile =
-    "${home}/.config/nixos/wireguard-wg0.conf";
+  networking.wg-quick.interfaces = lib.optionalAttrs useWireguard {
+    wg0.configFile = "${home}/.config/nixos/wireguard-wg0.conf";
+  };
+
+  services.openvpn.servers = lib.optionalAttrs useOpenvpn {
+    academy = {
+      autoStart = true;
+      updateResolvConf = true;
+      config = ''
+        config ${home}/.config/nixos/openvpn-academy.ovpn
+      '';
+    };
+  };
 
   system.activationScripts.local-hosts = {
     text = ''
