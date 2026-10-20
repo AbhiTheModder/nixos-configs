@@ -282,8 +282,8 @@
     "localNixosConfig": {
       "flake": false,
       "locked": {
-        "lastModified": 1791314015,
-        "narHash": "sha256-Y3xsptX3nnHAuaFz+vc48X3IBm4a3NJivz0dpdfHvHA=",
+        "lastModified": 1792342958,
+        "narHash": "sha256-Yg1G9JWm9PIMk41qrYiBqKhusrctOpT0LRmPYrm1SrE=",
         "path": "/home/abhi/.config/nixos",
         "type": "path"
       },
@@ -558,11 +558,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783320166,
-        "narHash": "sha256-l7C/OsjcnWDOk2K3ssj+SBduwL67LashjBqis9+t468=",
+        "lastModified": 1791013993,
+        "narHash": "sha256-BiFPwFsbFnZH5GfWbQFKYuQNg+67aNQCoRSRNTeJFQc=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "20ee15370c9256669d66968b89ee20a4b0a4e673",
+        "rev": "7470661ba2b51156048af08464b82020223dc942",
         "type": "github"
       },
       "original": {
@@ -725,11 +725,11 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1787735487,
-        "narHash": "sha256-naXd586adIR0haaaBiLRkC5POWNc8tW6pzFnR31kLmk=",
+        "lastModified": 1792507858,
+        "narHash": "sha256-EEfOrxveuFcXigE5frf6U5rzw1JdzRZ9IcSZzysnHGA=",
         "owner": "sxyazi",
         "repo": "yazi",
-        "rev": "1fbf3ef17158b3acd2f74cda4ab478adf3251b03",
+        "rev": "7c45837d553b6cb8032bd7fec2106fdb628e4017",
         "type": "github"
       },
       "original": {

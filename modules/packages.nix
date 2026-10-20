@@ -63,7 +63,6 @@ in
       bunnylol
       python3
       python3Packages.pip
-      crush
       yazi
       claude-code
       inputs.ekphos.packages.${pkgs.stdenv.hostPlatform.system}.default

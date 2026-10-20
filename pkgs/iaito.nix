@@ -14,14 +14,14 @@
 let
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "iaito-unwrapped";
-    version = "6.2.0";
+    version = "6.2.2";
 
     srcs = [
       (fetchFromGitHub {
         owner = "radareorg";
         repo = "iaito";
-        rev = "55a401b3dc22e2df0536c84c0ee775f5ea314d93";
-        hash = "sha256-ZtLgV1cDmPinfjgH1yZ7AzCUKGJ2BkX2PuEYp+vWR5I=";
+        rev = "bbbea0adcdd9085e8c3e7806c914ec410a42be63";
+        hash = "sha256-wLgoKW5bAbQd02Sp4uQWHT/q+Cn+v74TfV5wEzo001w=";
         name = "main";
       })
       (fetchFromGitHub {

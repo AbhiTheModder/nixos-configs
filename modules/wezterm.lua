@@ -36,6 +36,28 @@ config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 config.hide_tab_bar_if_only_one_tab = false
 config.tab_max_width = 32
+config.show_new_tab_button_in_tab_bar = false
+config.status_update_interval = 1000
+
+config.keys = {
+  {
+    key = 'p',
+    mods = 'CTRL|ALT',
+    action = act.ShowLauncherArgs { flags = 'FUZZY|WORKSPACES|TABS' },
+  },
+  {
+    key = 'n',
+    mods = 'CTRL|SHIFT',
+    action = act.PromptInputLine {
+      description = 'New workspace: ',
+      action = wezterm.action_callback(function(window, pane, line)
+        if line and line ~= '' then
+          window:perform_action(act.SwitchToWorkspace { name = line }, pane)
+        end
+      end),
+    },
+  },
+}
 
 config.inactive_pane_hsb = {
   saturation = 0.85,
@@ -58,16 +80,91 @@ local function domain_label(domain_name)
   return label
 end
 
+local function path_from_uri(uri)
+  if not uri then
+    return nil
+  end
+
+  local value = tostring(uri)
+  if value:match '^file://' then
+    return value:gsub('^file://[^/]*', '')
+  end
+
+  return uri.file_path
+end
+
+local function basename_from_uri(uri)
+  local path = path_from_uri(uri)
+  if not path or path == '' then
+    return '~'
+  end
+
+  path = path:gsub('/+$', '')
+  return path:match '([^/]+)$' or path
+end
+
+local function project_label(uri)
+  return basename_from_uri(uri)
+end
+
+local function git_branch(uri)
+  local path = path_from_uri(uri)
+  if not path then
+    return nil
+  end
+
+  local ok, success, stdout = pcall(
+    wezterm.run_child_process,
+    { 'git', '-C', path, 'branch', '--show-current' }
+  )
+  if ok and success and stdout then
+    local branch = stdout:gsub('%s+$', '')
+    return branch ~= '' and branch or nil
+  end
+
+  return nil
+end
+
+local function process_label(pane)
+  local process = pane.foreground_process_name or ''
+  process = process:gsub('^.*/', '')
+
+  local known_agents = {
+    ['claude'] = 'Claude',
+    ['.claude-wrapped'] = 'Claude',
+    ['codex'] = 'Codex',
+    ['.codex-wrapped'] = 'Codex',
+    ['opencode'] = 'OpenCode',
+    ['pi'] = 'Pi',
+    ['crush'] = 'Crush',
+  }
+
+  return known_agents[process] or process
+end
+
+local function workspace_label()
+  return wezterm.mux.get_active_workspace() or 'default'
+end
+
+wezterm.on('update-right-status', function(window, pane)
+  local cwd_uri = pane:get_current_working_dir()
+  local workspace = workspace_label()
+  local branch = git_branch(cwd_uri)
+  local branch_label = branch and string.format('  ·   %s', branch) or ''
+  window:set_right_status(wezterm.format {
+    { Foreground = { Color = '#8be9fd' } },
+    { Text = string.format(' 󰉋 %s%s ', workspace, branch_label) },
+  })
+end)
+
 -- Keep the remote host visible in every tab, especially when several SSH
 -- aliases are open at once.
 wezterm.on('format-tab-title', function(tab, _, _, _, hover, max_width)
   local pane = tab.active_pane
   local domain = domain_label(pane.domain_name)
-  local title = tab.tab_title
-
-  if not title or #title == 0 then
-    title = pane.title
-  end
+  local project = project_label(pane.current_working_dir)
+  local agent = process_label(pane)
+  local title = tab.tab_title and #tab.tab_title > 0 and tab.tab_title or agent
 
   local has_unseen_output = false
   for _, tab_pane in ipairs(tab.panes) do
@@ -77,21 +174,22 @@ wezterm.on('format-tab-title', function(tab, _, _, _, hover, max_width)
     end
   end
 
-  local background = '#282a36'
-  local foreground = '#bd93f9'
+  local background = '#242631'
+  local foreground = '#aeb4c4'
 
   if tab.is_active then
-    background = domain == 'local' and '#44475a' or '#6272a4'
+    background = domain == 'local' and '#3b4261' or '#31556b'
     foreground = '#f8f8f2'
   elseif has_unseen_output then
-    background = '#ffb86c'
-    foreground = '#282a36'
+    background = '#f1c75b'
+    foreground = '#20222d'
   elseif hover then
-    background = '#44475a'
+    background = '#34394d'
     foreground = '#f8f8f2'
   end
 
-  local label = string.format(' %s · %s ', domain, title)
+  local domain_prefix = domain == 'local' and '' or string.format('%s  ', domain)
+  local label = string.format(' %s%s / %s ', domain_prefix, project, title)
   label = wezterm.truncate_right(label, max_width)
 
   return {
