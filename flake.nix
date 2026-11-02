@@ -28,6 +28,10 @@
     };
     flyline.url = "github:HalFrgrd/flyline";
     terminal-browser.url = "github:AbhiTheModder/terminal-browser/nix";
+    forwiroh = {
+      url = "github:trufae/forwiroh";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     yazi = {
       url = "github:sxyazi/yazi";
       inputs.nixpkgs.follows = "nixpkgs";

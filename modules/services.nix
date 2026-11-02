@@ -1,8 +1,4 @@
-{ config, pkgs, primaryUser, ... }:
-
-let
-  home = config.users.users.${primaryUser}.home;
-in
+{ pkgs, primaryUser, ... }:
 
 {
   services.printing.enable = true;
@@ -23,25 +19,6 @@ in
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "no";
       AllowUsers = [ primaryUser ];
-    };
-  };
-
-  systemd.services.forwiroh = {
-    description = "Forwiroh peer-to-peer networking daemon";
-    wants = [ "network-online.target" ];
-    after = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig = {
-      ExecStartPre = "${pkgs.coreutils}/bin/install -d -o ${primaryUser} -g users ${home}/.local/state/forwiroh";
-      ExecStart = "${home}/.local/bin/forwiroh --state ${home}/.local/state/forwiroh serve";
-      User = primaryUser;
-      Group = "users";
-      Restart = "on-failure";
-      RestartSec = "5s";
-      UMask = "0077";
-      NoNewPrivileges = true;
-      PrivateTmp = true;
     };
   };
 

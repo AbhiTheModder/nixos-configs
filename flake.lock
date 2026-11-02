@@ -187,6 +187,21 @@
         "type": "github"
       }
     },
+    "forwiroh": {
+      "locked": {
+        "lastModified": 1793546148,
+        "narHash": "sha256-ldJBdBUplojMtwKPDuR8guisBzVlG7VTI+dQkpYgK0A=",
+        "owner": "trufae",
+        "repo": "forwiroh",
+        "rev": "51fed52dc9eb0e7b486532d138a862c70b12e2a7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "trufae",
+        "repo": "forwiroh",
+        "type": "github"
+      }
+    },
     "freetype2": {
       "flake": false,
       "locked": {
@@ -493,6 +508,7 @@
         "fagram": "fagram",
         "fix-python": "fix-python",
         "flyline": "flyline",
+        "forwiroh": "forwiroh",
         "helix": "helix",
         "ida-pro-overlay": "ida-pro-overlay",
         "localNixosConfig": "localNixosConfig",

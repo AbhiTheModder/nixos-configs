@@ -13,6 +13,7 @@ in
   imports = [
     inputs.flyline.nixosModules.default
     inputs.terminal-browser.nixosModules.default
+    inputs.forwiroh.nixosModules.default
     ./hardware-configuration.nix
 
     ./modules/boot.nix

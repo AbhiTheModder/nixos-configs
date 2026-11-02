@@ -5,6 +5,8 @@
 
   programs.flyline.enable = true;
 
+  programs.forwiroh.enable = true;
+
   programs.terminal-browser.enable = true;
 
   programs.xonsh = {
