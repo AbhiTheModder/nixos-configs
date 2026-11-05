@@ -128,6 +128,9 @@ in
   claude-code = claude-code;
   bunnylol = bunnylol;
   wshowkeys = wshowkeys;
+  watui = inputs.watui.packages.${system}.default.overrideAttrs (_: {
+    vendorHash = "sha256-AdTVUravcIsFPtbBTaVNMwq5NLjuN9T7feuW6R5Ynqk=";
+  });
   crush = crush;
   yazi = yazi;
 }

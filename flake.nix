@@ -30,8 +30,8 @@
     terminal-browser.url = "github:AbhiTheModder/terminal-browser/nix";
     forwiroh = {
       url = "github:trufae/forwiroh";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
+    watui.url = "github:Arun0A/watui";
     yazi = {
       url = "github:sxyazi/yazi";
       inputs.nixpkgs.follows = "nixpkgs";

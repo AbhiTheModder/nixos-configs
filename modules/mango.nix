@@ -581,7 +581,7 @@ in
     chooser_cmd = "${pkgs.wmenu}/bin/wmenu";
   };
 
-  programs.noctalia-greeter = {
+  services.displayManager.noctalia-greeter = {
     enable = true;
     settings = {
       session.default = "Mango";

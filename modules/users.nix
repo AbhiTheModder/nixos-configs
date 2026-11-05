@@ -1,5 +1,4 @@
 { pkgs, inputs, primaryUser, ... }:
-
 {
   users.groups.ideapad_laptop = {};
 
@@ -19,6 +18,7 @@
     ];
     packages = [
       inputs.fagram.packages.${pkgs.stdenv.hostPlatform.system}.default
+      pkgs.watui
     ];
   };
 }
