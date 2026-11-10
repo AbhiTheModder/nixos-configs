@@ -1,4 +1,14 @@
-{ pkgs, inputs, primaryUser, ... }:
+{ pkgs, pkgsUnstable, inputs, primaryUser, ... }:
+
+let
+  system = pkgs.stdenv.hostPlatform.system;
+  fagram = inputs.fagram.packages.${system}.default;
+  fagramWithWalletEngine = fagram.overrideAttrs (old: {
+    unwrapped = old.unwrapped.overrideAttrs (unwrapped: {
+      buildInputs = unwrapped.buildInputs ++ [ pkgsUnstable.wallet-engine ];
+    });
+  });
+in
 {
   users.groups.ideapad_laptop = {};
 
@@ -17,7 +27,7 @@
       "ideapad_laptop"
     ];
     packages = [
-      inputs.fagram.packages.${pkgs.stdenv.hostPlatform.system}.default
+      fagramWithWalletEngine
       pkgs.watui
     ];
   };
