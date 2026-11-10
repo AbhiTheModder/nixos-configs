@@ -74,7 +74,6 @@
     enable = true;
     package = pkgsUnstable.atuin;
   };
-  environment.etc."atuin/config.toml".text = "";
   programs.zoxide.enable = true;
   programs.bat.enable = true;
   programs.nix-ld.enable = true;
