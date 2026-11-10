@@ -1,4 +1,8 @@
-{ pkgs, primaryUser, ... }:
+{ config, pkgs, primaryUser, ... }:
+
+let
+  home = config.users.users.${primaryUser}.home;
+in
 
 {
   services.printing.enable = true;
@@ -46,6 +50,19 @@
       ExecStart = "${pkgs.bunnylol}/bin/bunnylol serve";
       Restart = "on-failure";
       RestartSec = "3s";
+    };
+  };
+
+  systemd.user.services.sesori-bridge = {
+    description = "Sesori AI Coding Sessions Bridge";
+    after = [ "network.target" ];
+    wantedBy = [ "default.target" ];
+
+    serviceConfig = {
+      ExecStart = "${pkgs.bash}/bin/bash -c 'exec ${home}/.local/bin/sesori-bridge --opencode-bin ${home}/.opencode/bin/opencode --antigravity-bin /run/current-system/sw/bin/agy --opencode-no-auto-start --opencode-host 127.0.0.1 --opencode-port 49374 --opencode-password \"$(${pkgs.jq}/bin/jq -r .password ${home}/.config/opencode/service.json)\"'";
+      Environment = "PATH=${pkgs.procps}/bin:/run/current-system/sw/bin";
+      Restart = "always";
+      RestartSec = "5s";
     };
   };
 
