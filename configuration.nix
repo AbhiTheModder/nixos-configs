@@ -57,6 +57,7 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [ "pnpm-10.34.0" ];
 
   gtk.iconCache.enable = true;
 

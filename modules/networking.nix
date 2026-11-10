@@ -4,7 +4,7 @@ let
   home = config.users.users.${primaryUser}.home;
 
   useWireguard = false;
-  useOpenvpn = true;
+  useOpenvpn = false;
 in
 
 {
