@@ -5,7 +5,7 @@ let
   system = pkgs.stdenv.hostPlatform.system;
 
   mangoConfig = pkgs.writeText "mango-config.conf" ''
-    monitorrule=make:LG Electronics,model:LG ULTRAGEAR,serial:406NTYT7U066,width:1920,height:1080,refresh:60
+    monitor_rule=make:LG Electronics,model:LG ULTRAGEAR,serial:406NTYT7U066,width:1920,height:1080,refresh:60
 
     env=QT_AUTO_SCREEN_SCALE_FACTOR,1
     env=GDK_SCALE,1
@@ -14,9 +14,8 @@ let
     cursor_theme=macOS
     trackpad_natural_scrolling=1
     border_radius=8
-    borderpx=2
+    border_px=2
     drag_tile_to_tile=1
-    ov_tab_mode=0
 
     blur=1
     blur_layer=1
@@ -35,20 +34,20 @@ let
     shadows_blur=12
     shadows_position_x=2
     shadows_position_y=2
-    shadowscolor=0x000000ff
+    shadows_color=0x000000ff
     focused_opacity=0.92
     unfocused_opacity=0.82
 
-    layerrule=noblur:1,noshadow:1,layer_name:noctalia-bar-default
-    layerrule=noblur:1,noshadow:1,layer_name:noctalia-notification
-    layerrule=noblur:1,noshadow:1,layer_name:noctalia-dock
-    layerrule=noblur:1,noshadow:1,layer_name:noctalia-panel
-    layerrule=noblur:1,noshadow:1,layer_name:noctalia-osd
+    layer_rule=no_blur:1,no_shadow:1,layer_name:noctalia-bar-default
+    layer_rule=no_blur:1,no_shadow:1,layer_name:noctalia-notification
+    layer_rule=no_blur:1,no_shadow:1,layer_name:noctalia-dock
+    layer_rule=no_blur:1,no_shadow:1,layer_name:noctalia-panel
+    layer_rule=no_blur:1,no_shadow:1,layer_name:noctalia-osd
 
-    windowrule=isfloating:1,isoverlay:1,appid:zen,title:Picture-in-Picture
+    window_rule=is_floating:1,is_overlay:1,app_id:zen,title:Picture-in-Picture
 
-    exec-once=noctalia
-    exec-once=${autoScale}
+    exec_once=noctalia
+    exec_once=${autoScale}
 
     bind=Super,Return,spawn,wezterm
     bind=Super,b,spawn,zen
@@ -99,7 +98,7 @@ let
     bind=NONE,Print,spawn,noctalia msg screenshot-region
     bind=SHIFT,Print,spawn,noctalia msg screenshot-fullscreen
 
-    keymode=resize
+    key_mode=resize
     bind=NONE,Left,resizewin,-20,0
     bind=NONE,Right,resizewin,+20,0
     bind=NONE,Up,resizewin,0,-20
@@ -107,12 +106,12 @@ let
     bind=NONE,Escape,setkeymode,default
     bind=NONE,Return,setkeymode,default
 
-    keymode=default
+    key_mode=default
 
     mousebind=SUPER,btn_left,moveresize,curmove
     mousebind=SUPER,btn_right,moveresize,curresize
 
-    source-optional=~/.config/mango/noctalia.conf
+    source_optional=~/.config/mango/noctalia.conf
   '';
 
   mangoReload = pkgs.writeText "mango-reload.toml" ''
@@ -120,9 +119,9 @@ let
     wallpaper_changed = "mmsg dispatch reload_config"
   '';
 
-  # Mango applies scale 1 unless a monitorrule says otherwise, so derive the
+  # Mango applies scale 1 unless a monitor_rule says otherwise, so derive the
   # scale from each output's native mode: 4K -> 1.5 (logical 2560x1440),
-  # 1440p -> 1.25, everything else stays 1. Runs as an exec-once watcher so
+  # 1440p -> 1.25, everything else stays 1. Runs as an exec_once watcher so
   # hotplugged monitors get scaled without config edits.
   autoScale = pkgs.writeShellScript "mango-auto-scale" ''
     #!/usr/bin/env bash

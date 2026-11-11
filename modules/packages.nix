@@ -1,6 +1,20 @@
 { pkgs, pkgsUnstable, inputs, ... }:
 
 let
+  # Nixpkgs builds these Rust crates in system mode, but Codex omits their libraries.
+  codexWithSystemDeps = pkgsUnstable.codex.overrideAttrs (old: {
+    buildInputs = old.buildInputs ++ [
+      pkgsUnstable.aws-lc
+      pkgsUnstable.zstd
+      pkgsUnstable.oniguruma
+      pkgsUnstable.sqlite
+    ];
+    # Codex's release build OOMs when Cargo uses all host CPUs.
+    preBuild = (old.preBuild or "") + ''
+      export NIX_BUILD_CORES=$(( NIX_BUILD_CORES > 2 ? 2 : NIX_BUILD_CORES ))
+    '';
+  });
+
   # Provides `node` backed by `bun`, so tools hardcoding
   # `#!/usr/bin/env node` or spawning `node` work without nodejs.
   # A plain `ln -s bun node` can't handle `node --version` / `-v`
@@ -80,7 +94,7 @@ in
       ruff
       zed-editor-fhs
       proton-vpn-cli
-      codex
+      codexWithSystemDeps
       antigravity-cli
       frida-tools
       # (lutris.override {

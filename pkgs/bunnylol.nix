@@ -11,11 +11,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "bunnylol.rs";
-    rev = "6dd85e0d8bac26d173cb98ded564a3e7e2fbe91f";
-    hash = "sha256-wqVF0y0oJbWKABOu3hY/Yl/MFilDloci30kFKEQnTKs=";
+    rev = "d628fb037f37596204efce663b8023a44b01c6fa";
+    hash = "sha256-0vPdLDe4xvkL28kXI2fChjqdwa9iAGS6o53SX4a6kB8=";
   };
 
-  cargoHash = "sha256-UgxZ58JJ9nkuGIWF3XlPogjSBKO1YBlyH/DvNOHo2BA=";
+  cargoHash = "sha256-+BxfDyx6UZBEx95ZeV7T5fqtwXKyt5MiWDBKDq2UXg0=";
 
   buildFeatures = [ "server" "cli" ];
 
