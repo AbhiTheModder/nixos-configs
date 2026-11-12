@@ -59,7 +59,7 @@ in
     wantedBy = [ "default.target" ];
 
     serviceConfig = {
-      ExecStart = "${pkgs.bash}/bin/bash -c 'exec ${home}/.local/bin/sesori-bridge --opencode-bin ${home}/.opencode/bin/opencode --antigravity-bin /run/current-system/sw/bin/agy --opencode-no-auto-start --opencode-host 127.0.0.1 --opencode-port 49374 --opencode-password \"$(${pkgs.jq}/bin/jq -r .password ${home}/.config/opencode/service.json)\"'";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'exec ${home}/.local/bin/sesori-bridge --opencode-bin ${home}/.opencode/bin/opencode --opencode-no-auto-start --opencode-host 127.0.0.1 --opencode-port 49374 --opencode-password \"$(${pkgs.jq}/bin/jq -r .password ${home}/.config/opencode/service.json)\"'";
       Environment = "PATH=${pkgs.procps}/bin:/run/current-system/sw/bin";
       Restart = "always";
       RestartSec = "5s";
