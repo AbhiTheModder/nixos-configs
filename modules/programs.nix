@@ -23,7 +23,7 @@
       reopt = "nix-store --optimize -vv";
       cat = "bat";
       vi = "hx";
-      ls = "eza --icons";
+      ls = "eza --icons auto";
       ".." = "cd ..";
       ":q" = "exit";
       wget = "wget -q --show-progress";
