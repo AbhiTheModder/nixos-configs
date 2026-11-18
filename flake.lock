@@ -453,22 +453,6 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1794042290,
-        "narHash": "sha256-ziZn2PvCJE5JEEpqTdxXwJpPB+L3YqoCpTAMCzyaP3U=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "f4a03c008967841f2a0b3cb7c436fc6fc31671f6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_7": {
-      "locked": {
         "lastModified": 1790323409,
         "narHash": "sha256-VVTPf+Hyd5ebpjBMHmrLMSBIeW6ls48Bqtosj7CNKLA=",
         "owner": "NixOS",
@@ -552,7 +536,6 @@
         "noctalia": "noctalia",
         "noctalia-greeter": "noctalia-greeter",
         "radare2": "radare2",
-        "terminal-browser": "terminal-browser",
         "watui": "watui",
         "wezterm": "wezterm",
         "yazi": "yazi",
@@ -735,29 +718,10 @@
         "type": "github"
       }
     },
-    "terminal-browser": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_6"
-      },
-      "locked": {
-        "lastModified": 1794323457,
-        "narHash": "sha256-ocZ+ANXz+7r34nPuB9sHiZmir3zP4/WGRAu14hXanN0=",
-        "owner": "AbhiTheModder",
-        "repo": "terminal-browser",
-        "rev": "031c60d55ed783181a02a84acfd491bdbd7ce583",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AbhiTheModder",
-        "ref": "nix",
-        "repo": "terminal-browser",
-        "type": "github"
-      }
-    },
     "watui": {
       "inputs": {
         "flake-utils": "flake-utils_4",
-        "nixpkgs": "nixpkgs_7"
+        "nixpkgs": "nixpkgs_6"
       },
       "locked": {
         "lastModified": 1794166382,

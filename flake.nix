@@ -27,7 +27,6 @@
       url = "github:radareorg/radare2";
     };
     flyline.url = "github:HalFrgrd/flyline";
-    terminal-browser.url = "github:AbhiTheModder/terminal-browser/nix";
     forwiroh = {
       url = "github:trufae/forwiroh";
     };

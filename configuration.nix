@@ -12,7 +12,6 @@ in
 {
   imports = [
     inputs.flyline.nixosModules.default
-    inputs.terminal-browser.nixosModules.default
     inputs.forwiroh.nixosModules.default
     ./hardware-configuration.nix
 
@@ -57,8 +56,6 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [ "pnpm-10.34.0" ];
-
   gtk.iconCache.enable = true;
 
   environment.etc."gtk-3.0/settings.ini".text = ''
